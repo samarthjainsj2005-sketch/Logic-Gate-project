@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logic Gates — Digital Logic Simulator & Timing Graph</title>
+  <meta name="description" content="Interactive digital logic gate simulator, gate type differentiation, and real-time digital waveform timing graphs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 7h6a5 5 0 0 1 5 5 5 5 0 0 1-5 5H3V7z" />
+          <path d="M14 12h7" />
+          <circle cx="21" cy="12" r="1.5" fill="currentColor" />
+          <path d="M3 10h3M3 14h3" />
+        </svg>
+        <div>
+          <h1 class="brand-title">Logic Gates</h1>
+          <p class="brand-subtitle">Digital Logic Gate Simulator & Waveform Graph</p>
+        </div>
+      </div>
+
+      <!-- Top View Switcher Tabs -->
+      <nav class="view-tabs" aria-label="Main Navigation">
+        <button type="button" class="view-tab active" data-view="simulator" id="tabSimulator">
+          <span class="tab-icon">⚡</span>
+          <span>Interactive Simulator</span>
+        </button>
+        <button type="button" class="view-tab" data-view="differentiation" id="tabDifferentiation">
+          <span class="tab-icon">📊</span>
+          <span>Gate Types & Graphs</span>
+        </button>
+      </nav>
+
+      <div class="nav-controls">
+        <button id="soundToggleBtn" class="nav-btn" type="button" aria-label="Toggle click sound">
+          <span class="btn-icon-sound">🔊</span>
+          <span class="btn-text">Sound: On</span>
+        </button>
+        <button id="guideModalBtn" class="nav-btn" type="button">
+          <span>📘</span>
+          <span>Guide</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content Container -->
+  <main class="main-container">
+
+    <!-- =========================================================================
+         VIEW 1: Interactive Circuit Simulator & Waveform Graph
+         ========================================================================= -->
+    <div class="view-pane active" id="paneSimulator">
+
+      <!-- STEP 1: Select Logic Gate -->
+      <section class="section-card selector-section" aria-label="Gate Selector">
+        <div class="section-header">
+          <div class="step-indicator">Step 1</div>
+          <h2 class="section-title">Select a Logic Gate</h2>
+        </div>
+
+        <!-- Logic Gate Selection Tabs -->
+        <div class="gate-grid" id="gateGrid" role="tablist">
+          <!-- Injected via JS -->
+        </div>
+      </section>
+
+      <!-- STEP 2 & 3: The Interactive Circuit & Input/Output Workbench -->
+      <section class="section-card workbench-section" id="workbenchSection">
+        
+        <!-- Gate Summary Header Banner -->
+        <div class="gate-banner">
+          <div class="banner-info">
+            <span class="gate-type-badge" id="gateTypeBadge">Basic Gate</span>
+            <h3 class="gate-heading" id="gateHeading">AND Gate</h3>
+            <p class="gate-summary" id="gateSummary">Outputs 1 (HIGH) only when both inputs A and B are 1.</p>
+          </div>
+          <div class="banner-equation">
+            <span class="eq-label">Boolean Expression</span>
+            <code class="eq-code" id="gateEquationCode">Y = A · B</code>
+          </div>
+        </div>
+
+        <!-- Two-Column Workbench Layout -->
+        <div class="workbench-layout">
+
+          <!-- Left Column: Inputs & Interactive Circuit Schematic -->
+          <div class="circuit-column">
+            
+            <div class="column-card">
+              <div class="card-top-bar">
+                <div class="step-indicator">Step 2</div>
+                <h4 class="card-heading">Set Inputs & Test Circuit</h4>
+                <div class="live-toggle-wrapper">
+                  <label class="switch-control" title="Toggle automatic real-time calculation">
+                    <input type="checkbox" id="autoUpdateCheckbox" checked>
+                    <span class="switch-track"></span>
+                    <span class="switch-label">Live update</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Visual Circuit Board Canvas Area -->
+              <div class="circuit-board">
+                
+                <!-- Input Terminal Controls (Left of circuit) -->
+                <div class="terminals-side">
+                  
+                  <!-- Terminal A -->
+                  <div class="terminal-block" id="terminalBlockA">
+                    <div class="terminal-label-row">
+                      <span class="terminal-name">Input A</span>
+                      <span class="terminal-badge" id="badgeInputA">0 (LOW)</span>
+                    </div>
+                    
+                    <div class="terminal-switch-row">
+                      <button type="button" class="bit-btn active" data-terminal="a" data-bit="0">0</button>
+                      <button type="button" class="bit-btn" data-terminal="a" data-bit="1">1</button>
+                      <button type="button" class="rocker-switch" id="rockerSwitchA" aria-label="Toggle Input A">
+                        <span class="rocker-thumb"></span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Terminal B (hidden for single-input gates) -->
+                  <div class="terminal-block" id="terminalBlockB">
+                    <div class="terminal-label-row">
+                      <span class="terminal-name">Input B</span>
+                      <span class="terminal-badge" id="badgeInputB">0 (LOW)</span>
+                    </div>
+                    
+                    <div class="terminal-switch-row">
+                      <button type="button" class="bit-btn active" data-terminal="b" data-bit="0">0</button>
+                      <button type="button" class="bit-btn" data-terminal="b" data-bit="1">1</button>
+                      <button type="button" class="rocker-switch" id="rockerSwitchB" aria-label="Toggle Input B">
+                        <span class="rocker-thumb"></span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Single-input notice for NOT gate -->
+                  <div class="single-input-notice hidden" id="singleInputNotice">
+                    <span>ℹ️ The NOT gate uses a single input (Input A).</span>
+                  </div>
+
+                </div>
+
+                <!-- Center: Clean Vector Schematic Diagram -->
+                <div class="schematic-center">
+                  <svg id="schematicSvg" class="schematic-svg" viewBox="0 0 380 200" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Wire A -->
+                    <path id="wireA" d="M 10 50 L 140 50" class="schematic-wire" />
+                    <circle id="nodeA" cx="12" cy="50" r="4" class="wire-node" />
+                    <text id="wireTextA" x="70" y="40" class="wire-tag">A = 0</text>
+
+                    <!-- Wire B -->
+                    <path id="wireB" d="M 10 150 L 140 150" class="schematic-wire" />
+                    <circle id="nodeB" cx="12" cy="150" r="4" class="wire-node" />
+                    <text id="wireTextB" x="70" y="140" class="wire-tag">B = 0</text>
+
+                    <!-- Gate Symbol Container -->
+                    <g id="schematicGateContainer" transform="translate(140, 10)">
+                      <!-- Gate paths injected here -->
+                    </g>
+
+                    <!-- Output Wire -->
+                    <path id="wireOut" d="M 280 100 L 365 100" class="schematic-wire" />
+                    <circle id="nodeOut" cx="365" cy="100" r="4" class="wire-node" />
+                    <text id="wireTextOut" x="320" y="90" class="wire-tag">Y = 0</text>
+                  </svg>
+                </div>
+
+                <!-- Output Terminal / Indicator (Right of circuit) -->
+                <div class="output-side">
+                  <div class="output-indicator-box" id="outputIndicatorBox">
+                    <span class="output-side-tag">Output (Y)</span>
+                    
+                    <div class="led-light" id="ledLight">
+                      <span class="led-bulb"></span>
+                    </div>
+
+                    <div class="output-val-large" id="outputValLarge">0</div>
+                    <span class="output-status-label" id="outputStatusLabel">LOW (0.0 V)</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Action Controls Under Circuit -->
+              <div class="circuit-actions-bar">
+                <div class="preset-group">
+                  <span class="preset-label">Quick combinations:</span>
+                  <div class="preset-pills" id="presetPills">
+                    <!-- Injected via JS based on gate type -->
+                  </div>
+                </div>
+
+                <div class="action-buttons">
+                  <button type="button" class="btn-calculate" id="manualComputeBtn">
+                    <span>Evaluate Output</span>
+                  </button>
+                  <button type="button" class="btn-secondary" id="resetBtn" title="Reset inputs to 0">
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- DIGITAL WAVEFORM TIMING GRAPH CARD (On Output) -->
+            <div class="column-card waveform-graph-card">
+              <div class="card-top-bar">
+                <div class="graph-heading-wrap">
+                  <span class="graph-icon">📈</span>
+                  <h4 class="card-heading">Digital Waveform Timing Graph</h4>
+                </div>
+                <div class="graph-controls-bar">
+                  <button type="button" class="graph-btn" id="runClockCycleBtn" title="Simulate a 4-step clock pulse sequence">
+                    <span>▶ Run 4-Step Clock</span>
+                  </button>
+                  <button type="button" class="graph-btn-secondary" id="clearWaveformBtn" title="Clear timing graph history">
+                    Clear
+                  </button>
+                </div>
+              </div>
+
+              <div class="graph-meta-strip">
+                <div class="signal-legend">
+                  <span class="legend-item legend-a"><span class="legend-line line-a"></span> Input A</span>
+                  <span class="legend-item legend-b" id="legendB"><span class="legend-line line-b"></span> Input B</span>
+                  <span class="legend-item legend-y"><span class="legend-line line-y"></span> Output Y</span>
+                </div>
+                <span class="graph-hint-text">Updates dynamically with input changes</span>
+              </div>
+
+              <div class="canvas-wrap">
+                <canvas id="waveformCanvas" width="600" height="180"></canvas>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column: STEP 3 Output Result, Explanation & Truth Table -->
+          <div class="analysis-column">
+            
+            <!-- Result & Explanation Box -->
+            <div class="column-card result-card" id="resultExplanationCard">
+              <div class="card-top-bar">
+                <div class="step-indicator step-3">Step 3</div>
+                <h4 class="card-heading">Result & Explanation</h4>
+              </div>
+
+              <div class="explanation-body">
+                <div class="result-highlight-row">
+                  <div class="result-pill-large" id="resultPillLarge">
+                    <span class="res-num" id="resDigit">0</span>
+                    <div class="res-meta">
+                      <span class="res-state" id="resStateText">LOW SIGNAL</span>
+                      <span class="res-voltage" id="resVoltageText">0.0 Volts (GND)</span>
+                    </div>
+                  </div>
+
+                  <div class="calc-breakdown">
+                    <span class="breakdown-label">Calculation:</span>
+                    <code class="breakdown-code" id="breakdownCode">0 · 0 = 0</code>
+                  </div>
+                </div>
+
+                <div class="explanation-callout">
+                  <p id="explanationParagraph" class="explanation-text">
+                    Both inputs A and B are 0. Since an AND gate requires all inputs to be 1, the output remains 0.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Truth Table Card -->
+            <div class="column-card table-card">
+              <div class="card-top-bar">
+                <h4 class="card-heading">Truth Table</h4>
+                <span class="table-hint">Click any row to apply it</span>
+              </div>
+
+              <div class="table-wrap">
+                <table class="truth-table" id="truthTable">
+                  <thead>
+                    <tr id="truthTableHead">
+                      <th>A</th>
+                      <th id="thB">B</th>
+                      <th>Output (Y)</th>
+                      <th>State</th>
+                    </tr>
+                  </thead>
+                  <tbody id="truthTableBody">
+                    <!-- Injected via JS -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Notes on Universal & Educational Equivalents -->
+              <div class="gate-notes" id="gateNotes">
+                <span class="notes-title">Logic Property:</span>
+                <p class="notes-body" id="gateNotesBody"></p>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- =========================================================================
+         VIEW 2: Gate Types Differentiation & Comparative Waveform Graph
+         ========================================================================= -->
+    <div class="view-pane" id="paneDifferentiation">
+
+      <!-- Classification Overview Header -->
+      <section class="section-card">
+        <div class="diff-intro-header">
+          <div>
+            <span class="diff-eyebrow">DIGITAL LOGIC CLASSIFICATION</span>
+            <h2 class="diff-main-title">Differentiating Logic Gate Types</h2>
+            <p class="diff-main-desc">
+              Digital logic gates are categorized into three distinct families based on their functional role, universal completeness, and arithmetic capability.
+            </p>
+          </div>
+        </div>
+
+        <!-- Three Classification Cards -->
+        <div class="categories-grid">
+          
+          <!-- Category 1: Basic Gates -->
+          <div class="category-card cat-basic">
+            <div class="cat-card-header">
+              <span class="cat-pill">FOUNDATIONAL</span>
+              <h3 class="cat-title">1. Basic Gates</h3>
+            </div>
+            <p class="cat-desc">
+              The fundamental building blocks representing atomic Boolean algebra operations: conjunction (AND), disjunction (OR), and negation (NOT).
+            </p>
+            <div class="cat-gates-list">
+              <div class="cat-gate-chip"><strong>AND</strong> (All 1s → 1)</div>
+              <div class="cat-gate-chip"><strong>OR</strong> (Any 1 → 1)</div>
+              <div class="cat-gate-chip"><strong>NOT</strong> (Inverts 0 ↔ 1)</div>
+            </div>
+            <div class="cat-footer-note">
+              <em>Key property:</em> Cannot be simplified further. All other logic circuits are historically derived from these.
+            </div>
+          </div>
+
+          <!-- Category 2: Universal Gates -->
+          <div class="category-card cat-universal">
+            <div class="cat-card-header">
+              <span class="cat-pill pill-universal">UNIVERSAL COMPLETENESS</span>
+              <h3 class="cat-title">2. Universal Gates</h3>
+            </div>
+            <p class="cat-desc">
+              Functionally complete gates capable of implementing <strong>ANY</strong> Boolean function or CPU component without needing any other gate type.
+            </p>
+            <div class="cat-gates-list">
+              <div class="cat-gate-chip"><strong>NAND</strong> (NOT-AND)</div>
+              <div class="cat-gate-chip"><strong>NOR</strong> (NOT-OR)</div>
+            </div>
+            <div class="cat-footer-note">
+              <em>De Morgan's Laws:</em> $(\overline{A \cdot B}) = \overline{A} + \overline{B}$ and $(\overline{A + B}) = \overline{A} \cdot \overline{B}$.
+            </div>
+          </div>
+
+          <!-- Category 3: Exclusive Gates -->
+          <div class="category-card cat-exclusive">
+            <div class="cat-card-header">
+              <span class="cat-pill pill-exclusive">ARITHMETIC & PARITY</span>
+              <h3 class="cat-title">3. Exclusive Gates</h3>
+            </div>
+            <p class="cat-desc">
+              Specialized arithmetic gates designed for parity generation, digital bit comparison, and binary addition (Sum bit in Half/Full Adders).
+            </p>
+            <div class="cat-gates-list">
+              <div class="cat-gate-chip"><strong>XOR</strong> (1 when inputs differ)</div>
+              <div class="cat-gate-chip"><strong>XNOR</strong> (1 when inputs match)</div>
+            </div>
+            <div class="cat-footer-note">
+              <em>Modulo-2 addition:</em> XOR functions as binary single-bit addition without carry.
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Interactive Multi-Gate Input & Output Tester with Graph -->
+      <section class="section-card multi-test-section">
+        <div class="section-header">
+          <h3 class="section-title">Interactive Multi-Gate Comparator & Output Graph</h3>
+          <p class="section-sub-text">
+            Give inputs below to observe how all gate types respond simultaneously, and view their comparative signal graph.
+          </p>
+        </div>
+
+        <div class="multi-comparator-layout">
+          
+          <!-- Input Controls for Multi-Gate Test -->
+          <div class="multi-input-box">
+            <span class="box-tag">INPUT OPTIONS</span>
+            <div class="multi-terminals-row">
+              
+              <div class="multi-terminal-unit">
+                <span class="m-label">Input A:</span>
+                <div class="terminal-switch-row">
+                  <button type="button" class="multi-bit-btn active" data-terminal="a" data-bit="0">0</button>
+                  <button type="button" class="multi-bit-btn" data-terminal="a" data-bit="1">1</button>
+                </div>
+              </div>
+
+              <div class="multi-terminal-unit">
+                <span class="m-label">Input B:</span>
+                <div class="terminal-switch-row">
+                  <button type="button" class="multi-bit-btn active" data-terminal="b" data-bit="0">0</button>
+                  <button type="button" class="multi-bit-btn" data-terminal="b" data-bit="1">1</button>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="multi-presets-row">
+              <span class="preset-label">Test inputs:</span>
+              <button type="button" class="preset-pill active" id="btnPreset00">0, 0</button>
+              <button type="button" class="preset-pill" id="btnPreset01">0, 1</button>
+              <button type="button" class="preset-pill" id="btnPreset10">1, 0</button>
+              <button type="button" class="preset-pill" id="btnPreset11">1, 1</button>
+            </div>
+          </div>
+
+          <!-- Real-Time Output Across All 7 Gates -->
+          <div class="multi-output-grid" id="multiOutputGrid">
+            <!-- Dynamically populated cards for all 7 gates -->
+          </div>
+
+        </div>
+
+        <!-- Comparative Output Response Graph -->
+        <div class="multi-graph-box">
+          <div class="card-top-bar">
+            <div class="graph-heading-wrap">
+              <span class="graph-icon">📊</span>
+              <h4 class="card-heading">Comparative Output Logic Level Graph (5V vs 0V)</h4>
+            </div>
+            <span class="graph-hint-text">Logic Levels for Current Input State</span>
+          </div>
+
+          <div class="comparative-canvas-wrap">
+            <canvas id="comparativeBarCanvas" width="800" height="190"></canvas>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Comprehensive Master Differentiation Table -->
+      <section class="section-card">
+        <div class="section-header">
+          <h3 class="section-title">Master Logic Gate Comparison Matrix</h3>
+        </div>
+
+        <div class="table-wrap">
+          <table class="truth-table diff-matrix-table">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Gate</th>
+                <th>Symbol</th>
+                <th>Expression</th>
+                <th>Output = 1 (HIGH) Condition</th>
+                <th>Key Application</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="cat-pill">Basic</span></td>
+                <td><strong>AND</strong></td>
+                <td><code>A · B</code></td>
+                <td><code>Y = A · B</code></td>
+                <td>All inputs must be 1</td>
+                <td>Address decoders, serial enables</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill">Basic</span></td>
+                <td><strong>OR</strong></td>
+                <td><code>A + B</code></td>
+                <td><code>Y = A + B</code></td>
+                <td>At least one input is 1</td>
+                <td>Interrupt lines, alarm sensors</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill">Basic</span></td>
+                <td><strong>NOT</strong></td>
+                <td><code>A̅</code></td>
+                <td><code>Y = A̅</code></td>
+                <td>Single input must be 0</td>
+                <td>Signal inverting, clock oscillators</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill pill-universal">Universal</span></td>
+                <td><strong>NAND</strong></td>
+                <td><code>(A · B)̅</code></td>
+                <td><code>Y = (A · B)̅</code></td>
+                <td>At least one input is 0</td>
+                <td>Silicon SSD flash, universal logic</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill pill-universal">Universal</span></td>
+                <td><strong>NOR</strong></td>
+                <td><code>(A + B)̅</code></td>
+                <td><code>Y = (A + B)̅</code></td>
+                <td>All inputs must be 0</td>
+                <td>SR flip-flops, Apollo Guidance Computer</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
+                <td><strong>XOR</strong></td>
+                <td><code>A ⊕ B</code></td>
+                <td><code>Y = A ⊕ B</code></td>
+                <td>Inputs are different ($A \neq B$)</td>
+                <td>Half-adders, parity generation, crypto</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
+                <td><strong>XNOR</strong></td>
+                <td><code>(A ⊕ B)̅</code></td>
+                <td><code>Y = A ⊙ B</code></td>
+                <td>Inputs are identical ($A = B$)</td>
+                <td>Magnitude comparators, equality test</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- Help & Shortcuts Modal -->
+  <div class="modal-backdrop hidden" id="helpModal" role="dialog" aria-modal="true">
+    <div class="modal-window">
+      <div class="modal-header">
+        <h3 class="modal-title">Logic Gates Guide & Shortcuts</h3>
+        <button type="button" class="modal-close" id="closeHelpModalBtn">&times;</button>
+      </div>
+
+      <div class="modal-content">
+        <div class="modal-section">
+          <h4>⌨️ Keyboard Shortcuts</h4>
+          <table class="shortcut-table">
+            <tr><td><kbd>A</kbd></td><td>Toggle Input A (0 ↔ 1)</td></tr>
+            <tr><td><kbd>B</kbd></td><td>Toggle Input B (0 ↔ 1)</td></tr>
+            <tr><td><kbd>1</kbd> – <kbd>7</kbd></td><td>Switch gate (AND, OR, NOT, NAND, NOR, XOR, XNOR)</td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>Evaluate output</td></tr>
+            <tr><td><kbd>R</kbd></td><td>Reset inputs to 0</td></tr>
+          </table>
+        </div>
+
+        <div class="modal-section">
+          <h4>📚 Logic Gates Quick Reference</h4>
+          <ul class="ref-list">
+            <li><strong>AND:</strong> 1 only when <em>all</em> inputs are 1.</li>
+            <li><strong>OR:</strong> 1 if <em>any</em> input is 1.</li>
+            <li><strong>NOT:</strong> Reverses 0 to 1, and 1 to 0.</li>
+            <li><strong>NAND:</strong> Universal; opposite of AND.</li>
+            <li><strong>NOR:</strong> Universal; opposite of OR.</li>
+            <li><strong>XOR:</strong> 1 when inputs differ.</li>
+            <li><strong>XNOR:</strong> 1 when inputs are equal.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn-primary" id="modalDismissBtn">Got it</button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <p>Logic Gates — Digital Logic & Discrete Structures Educational Simulator</p>
+      <span class="footer-sub">ANSI IEEE 91-1984 Standard Timing Diagrams</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
