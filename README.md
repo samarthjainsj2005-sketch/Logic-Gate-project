@@ -1,8 +1,13 @@
 # ⚡ Logic Gates — Digital Logic Simulator & Timing Graph
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Online%2024%2F7-10b981?style=for-the-badge&logo=googlechrome&logoColor=white)](https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/)
+[![GitHub Pages](https://img.shields.io/badge/Hosted%20on-GitHub%20Pages-181717?style=for-the-badge&logo=github&logoColor=white)](https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/)
+[![Repository](https://img.shields.io/badge/Repository-GitHub-6366f1?style=for-the-badge&logo=github)](https://github.com/samarthjainsj2005-sketch/Logic-Gate-project)
+
 An interactive, clean digital logic gate simulator and waveform timing graph explorer built for computer science students, teachers, and electrical engineers.
 
-🌐 **Live 24/7 Website:** [https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/](https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/)
+> 🌐 **Live 24/7 Simulator Website:**  
+> **[https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/](https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/)**
 
 ---
 

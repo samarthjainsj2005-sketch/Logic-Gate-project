@@ -175,6 +175,7 @@ body {
   align-items: center;
   gap: 0.4rem;
   transition: all var(--transition-fast);
+  text-decoration: none;
 }
 
 .nav-btn:hover {
@@ -1639,6 +1640,27 @@ body {
   gap: 0.75rem;
   font-size: 0.78rem;
   color: var(--text-dim);
+}
+
+.footer-links {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.footer-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: #fff;
+}
+
+.footer-sep {
+  color: var(--border-medium);
+  font-size: 0.7rem;
 }
 
 .footer-sub {
