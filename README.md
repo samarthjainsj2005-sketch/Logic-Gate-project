@@ -2,6 +2,8 @@
 
 An interactive, clean digital logic gate simulator and waveform timing graph explorer built for computer science students, teachers, and electrical engineers.
 
+🌐 **Live 24/7 Website:** [https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/](https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/)
+
 ---
 
 ## 🌟 Key Features
