@@ -622,16 +622,31 @@
       tab.className = `gate-card-tab ${gate.id === state.gateId ? 'active' : ''}`;
       tab.dataset.gate = gate.id;
       tab.setAttribute('role', 'tab');
-      tab.title = `${gate.name} (${gate.formula})`;
+      tab.setAttribute('aria-selected', gate.id === state.gateId ? 'true' : 'false');
+      tab.setAttribute('tabindex', '0');
+      tab.title = `${gate.name} (${gate.formula}) — Click to simulate`;
+
+      const inputBadgeText = gate.inputs === 1 ? '1 Input' : (gate.inputs === 3 ? '3 Inputs' : '2 Inputs');
+      const inputBadgeClass = gate.inputs === 1 ? 'tab-pill-1in' : (gate.inputs === 3 ? 'tab-pill-3in' : 'tab-pill-2in');
 
       tab.innerHTML = `
-        ${gate.tabSvg}
+        <span class="tab-input-pill ${inputBadgeClass}">${inputBadgeText}</span>
+        <div class="tab-svg-container">
+          ${gate.tabSvg}
+        </div>
         <span class="tab-name">${gate.shortName}</span>
         <span class="tab-formula">${gate.formula.replace('Y = ', '')}</span>
       `;
       tab.addEventListener('click', () => {
         selectGate(gate.id);
         AudioEngine.playClick(true);
+      });
+      tab.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          selectGate(gate.id);
+          AudioEngine.playClick(true);
+        }
       });
       DOM.gateGrid.appendChild(tab);
     });
@@ -646,7 +661,11 @@
 
     // Update active tab highlight
     const tabs = DOM.gateGrid.querySelectorAll('.gate-card-tab');
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.gate === gateId));
+    tabs.forEach(t => {
+      const isActive = t.dataset.gate === gateId;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
 
     // Update Banner
     DOM.gateTypeBadge.textContent = gate.category;

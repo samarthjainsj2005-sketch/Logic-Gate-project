@@ -253,86 +253,173 @@ body {
   color: #fff;
 }
 
+.section-sub-hint {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 3px 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-light);
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .section-sub-hint {
+    display: none;
+  }
+}
+
 /* Gate Selection Tabs (11 Gates) */
 .gate-grid {
   display: grid;
-  grid-template-columns: repeat(11, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.85rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1100px) {
   .gate-grid {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
   }
 }
 
 @media (max-width: 768px) {
   .gate-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
   }
 }
 
 @media (max-width: 480px) {
   .gate-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
   }
 }
 
 .gate-card-tab {
-  background: var(--bg-card-subtle);
-  border: 1px solid var(--border-light);
+  background: #141e30;
+  border: 1.5px solid #2a3c54;
   border-radius: var(--radius-md);
-  padding: 0.65rem 0.35rem;
+  padding: 1rem 0.65rem;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.3rem;
+  gap: 0.45rem;
   transition: all var(--transition-fast);
   user-select: none;
   min-width: 0;
+  min-height: 126px;
+  position: relative;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
 }
 
 .gate-card-tab:hover {
-  background: var(--bg-card-elevated);
-  border-color: var(--border-medium);
-  transform: translateY(-1px);
+  background: #1b2940;
+  border-color: #60a5fa;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
 .gate-card-tab.active {
-  background: var(--bg-card-elevated);
+  background: linear-gradient(145deg, rgba(16, 185, 129, 0.18), rgba(15, 23, 42, 0.95));
   border-color: var(--signal-high);
-  box-shadow: 0 0 0 1px var(--signal-high);
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.35), inset 0 0 12px rgba(16, 185, 129, 0.08);
+  transform: translateY(-2px);
+}
+
+.tab-input-pill {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  line-height: 1.2;
+}
+
+.tab-pill-1in {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.tab-pill-2in {
+  background: rgba(99, 102, 241, 0.15);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.tab-pill-3in {
+  background: rgba(6, 182, 212, 0.15);
+  color: #67e8f9;
+  border: 1px solid rgba(6, 182, 212, 0.35);
+}
+
+.gate-card-tab.active .tab-input-pill {
+  background: rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+  border-color: rgba(52, 211, 153, 0.5);
+}
+
+.tab-svg-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 0;
 }
 
 .tab-icon-svg {
-  width: 52px;
-  height: 28px;
+  width: 68px;
+  height: 34px;
+  display: block;
 }
 
 .tab-icon-svg path,
 .tab-icon-svg polygon,
+.tab-icon-svg line {
+  stroke: #e2e8f0;
+  stroke-width: 2.2;
+  transition: all var(--transition-fast);
+}
+
 .tab-icon-svg circle {
-  stroke: var(--text-dim);
-  transition: stroke var(--transition-fast);
+  stroke: #e2e8f0;
+  stroke-width: 2.2;
+  fill: #141e30;
+  transition: all var(--transition-fast);
 }
 
 .gate-card-tab:hover .tab-icon-svg path,
-.gate-card-tab:hover .tab-icon-svg polygon {
-  stroke: var(--text-main);
+.gate-card-tab:hover .tab-icon-svg polygon,
+.gate-card-tab:hover .tab-icon-svg line {
+  stroke: #ffffff;
+}
+
+.gate-card-tab:hover .tab-icon-svg circle {
+  stroke: #ffffff;
+  fill: #1b2940;
 }
 
 .gate-card-tab.active .tab-icon-svg path,
 .gate-card-tab.active .tab-icon-svg polygon,
+.gate-card-tab.active .tab-icon-svg line,
 .gate-card-tab.active .tab-icon-svg circle {
   stroke: var(--signal-high);
 }
 
+.gate-card-tab.active .tab-icon-svg circle {
+  fill: rgba(16, 185, 129, 0.25);
+}
+
 .tab-name {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-main);
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: 0.02em;
 }
 
 .gate-card-tab.active .tab-name {
@@ -341,8 +428,20 @@ body {
 
 .tab-formula {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  color: var(--text-dim);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+}
+
+.gate-card-tab.active .tab-formula {
+  color: #a7f3d0;
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(52, 211, 153, 0.4);
 }
 
 /* Workbench Section */
