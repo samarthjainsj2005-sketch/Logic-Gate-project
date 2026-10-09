@@ -447,6 +447,41 @@ body {
   flex: 1;
 }
 
+/* Input Mode Selector (2-Input vs 3-Input) */
+.input-mode-selector {
+  display: inline-flex;
+  background: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-tab {
+  background: transparent;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.mode-tab:hover {
+  color: #fff;
+}
+
+.mode-tab.active {
+  background: var(--signal-high);
+  color: #0c1017;
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
+}
+
 .live-toggle-wrapper {
   display: flex;
   align-items: center;
@@ -526,6 +561,11 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  transition: gap var(--transition-fast);
+}
+
+.terminals-side.is-3-input {
+  gap: 0.6rem;
 }
 
 .terminal-block {
@@ -980,7 +1020,10 @@ body {
 
 .line-a { background-color: var(--accent-amber); }
 .line-b { background-color: var(--accent-purple); }
+.line-c { background-color: #06b6d4; }
 .line-y { background-color: var(--signal-high); }
+
+.legend-c { color: #06b6d4; }
 
 .graph-hint-text {
   font-size: 0.72rem;

@@ -18,13 +18,13 @@ An interactive, clean digital logic gate simulator and waveform timing graph exp
   - **Basic Gates**: AND, OR, NOT
   - **Universal Gates**: NAND, NOR
   - **Exclusive / Arithmetic Gates**: XOR, XNOR
-- **Step 1: Select a Gate** — Clean vector schematic outlines and IEEE standard symbols.
-- **Step 2: Set Inputs** — Tactile bit toggles (`0` and `1`), interactive rocker switches, and combination presets (`A=0, B=0`, `A=0, B=1`, etc.).
+- **Step 1: Select a Gate & Input Mode** — Clean vector schematic outlines, IEEE standard symbols, and instant toggle between **2-Input Mode (A, B)** and **3-Input Mode (A, B, C)**.
+- **Step 2: Set Inputs** — Tactile bit toggles (`0` and `1`), interactive rocker switches, and combination presets (`0,0`, `0,1`, `1,0`, `1,1` or 8-step presets for 3 inputs).
 - **Step 3: Result & Deduction** — Instant output evaluation (`0.0V / GND` vs `5.0V / VCC`), step-by-step boolean calculation breakdown, and plain-English logic explanations.
 
 ### 2. Digital Waveform Timing Graph (Oscilloscope)
-- Real-time square-wave timing diagram plotting **Input A** (Amber), **Input B** (Purple), and **Output Y** (Emerald green).
-- **▶ Run 4-Step Clock**: Cycles through all binary permutations (`00 → 01 → 10 → 11`) to draw a complete 4-period timing diagram automatically.
+- Real-time square-wave timing diagram plotting **Input A** (Amber), **Input B** (Purple), **Input C** (Cyan), and **Output Y** (Emerald green).
+- **▶ Run 4-Step / 8-Step Clock**: Cycles through all binary permutations (`00 → 11` or `000 → 111`) to draw a complete timing diagram automatically.
 
 ### 3. Gate Types Differentiation & Comparator Tab
 - Deep, structured breakdown of the 3 fundamental gate families.
@@ -60,6 +60,8 @@ Simply double-click `index.html` to open it in Chrome, Edge, or Firefox without 
 |---|---|
 | <kbd>A</kbd> | Toggle Input A (0 ↔ 1) |
 | <kbd>B</kbd> | Toggle Input B (0 ↔ 1) |
+| <kbd>C</kbd> | Toggle Input C (0 ↔ 1) |
+| <kbd>M</kbd> | Switch between 2-Input and 3-Input modes |
 | <kbd>1</kbd> – <kbd>7</kbd> | Switch between AND, OR, NOT, NAND, NOR, XOR, XNOR |
 | <kbd>Enter</kbd> | Evaluate output |
 | <kbd>R</kbd> | Reset all inputs to 0 |

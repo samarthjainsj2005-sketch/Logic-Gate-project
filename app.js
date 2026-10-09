@@ -1,6 +1,7 @@
 /**
  * Logic Gates — Digital Logic Simulator & Waveform Engine
  * Interactive Workbench, Gate Differentiation & Real-Time Waveform Graphs
+ * Supports 2-Input and 3-Input logic gates with waveforms and truth tables
  */
 
 (function () {
@@ -56,16 +57,29 @@
       category: 'Basic Gate',
       categoryType: 'basic',
       inputs: 2,
-      formula: 'Y = A · B',
-      summary: 'Outputs 1 (HIGH) only when BOTH inputs A and B are 1.',
-      eval: (a, b) => (a === 1 && b === 1 ? 1 : 0),
-      table: [
+      formula2: 'Y = A · B',
+      formula3: 'Y = A · B · C',
+      summary2: 'Outputs 1 (HIGH) only when BOTH inputs A and B are 1.',
+      summary3: 'Outputs 1 (HIGH) only when ALL THREE inputs (A, B, and C) are 1.',
+      eval2: (a, b) => (a === 1 && b === 1 ? 1 : 0),
+      eval3: (a, b, c) => (a === 1 && b === 1 && c === 1 ? 1 : 0),
+      table2: [
         { a: 0, b: 0, y: 0 },
         { a: 0, b: 1, y: 0 },
         { a: 1, b: 0, y: 0 },
         { a: 1, b: 1, y: 1 }
       ],
-      note: 'Analogy: Two light switches in series. Current passes only when both are closed.',
+      table3: [
+        { a: 0, b: 0, c: 0, y: 0 },
+        { a: 0, b: 0, c: 1, y: 0 },
+        { a: 0, b: 1, c: 0, y: 0 },
+        { a: 0, b: 1, c: 1, y: 0 },
+        { a: 1, b: 0, c: 0, y: 0 },
+        { a: 1, b: 0, c: 1, y: 0 },
+        { a: 1, b: 1, c: 0, y: 0 },
+        { a: 1, b: 1, c: 1, y: 1 }
+      ],
+      note: 'Analogy: Switches connected in series. Current passes only when all switches are closed.',
       svg: `
         <path d="M 0 10 L 70 10 C 130 10 150 45 150 90 C 150 135 130 170 70 170 L 0 170 Z" class="gate-body-path" />
         <path d="M 150 90 L 170 90" class="schematic-wire" />
@@ -83,16 +97,29 @@
       category: 'Basic Gate',
       categoryType: 'basic',
       inputs: 2,
-      formula: 'Y = A + B',
-      summary: 'Outputs 1 (HIGH) if AT LEAST ONE input (A or B) is 1.',
-      eval: (a, b) => (a === 1 || b === 1 ? 1 : 0),
-      table: [
+      formula2: 'Y = A + B',
+      formula3: 'Y = A + B + C',
+      summary2: 'Outputs 1 (HIGH) if AT LEAST ONE input (A or B) is 1.',
+      summary3: 'Outputs 1 (HIGH) if AT LEAST ONE of the three inputs is 1.',
+      eval2: (a, b) => (a === 1 || b === 1 ? 1 : 0),
+      eval3: (a, b, c) => (a === 1 || b === 1 || c === 1 ? 1 : 0),
+      table2: [
         { a: 0, b: 0, y: 0 },
         { a: 0, b: 1, y: 1 },
         { a: 1, b: 0, y: 1 },
         { a: 1, b: 1, y: 1 }
       ],
-      note: 'Analogy: Two light switches in parallel. Current passes if either switch is closed.',
+      table3: [
+        { a: 0, b: 0, c: 0, y: 0 },
+        { a: 0, b: 0, c: 1, y: 1 },
+        { a: 0, b: 1, c: 0, y: 1 },
+        { a: 0, b: 1, c: 1, y: 1 },
+        { a: 1, b: 0, c: 0, y: 1 },
+        { a: 1, b: 0, c: 1, y: 1 },
+        { a: 1, b: 1, c: 0, y: 1 },
+        { a: 1, b: 1, c: 1, y: 1 }
+      ],
+      note: 'Analogy: Switches connected in parallel. Current passes if any switch is closed.',
       svg: `
         <path d="M 0 10 Q 30 90 0 170 Q 75 165 150 90 Q 75 15 0 10 Z" class="gate-body-path" />
         <path d="M 150 90 L 170 90" class="schematic-wire" />
@@ -110,10 +137,17 @@
       category: 'Basic Gate',
       categoryType: 'basic',
       inputs: 1,
-      formula: 'Y = A̅',
-      summary: 'Inverts the digital input: 0 becomes 1, and 1 becomes 0.',
-      eval: (a) => (a === 1 ? 0 : 1),
-      table: [
+      formula2: 'Y = A̅',
+      formula3: 'Y = A̅',
+      summary2: 'Inverts the digital input: 0 becomes 1, and 1 becomes 0.',
+      summary3: 'Inverts the digital input: 0 becomes 1, and 1 becomes 0 (Inverter is strictly single-input).',
+      eval2: (a) => (a === 1 ? 0 : 1),
+      eval3: (a) => (a === 1 ? 0 : 1),
+      table2: [
+        { a: 0, y: 1 },
+        { a: 1, y: 0 }
+      ],
+      table3: [
         { a: 0, y: 1 },
         { a: 1, y: 0 }
       ],
@@ -137,14 +171,27 @@
       category: 'Universal Gate',
       categoryType: 'universal',
       inputs: 2,
-      formula: 'Y = (A · B)̅',
-      summary: 'Outputs 0 (LOW) only when both inputs are 1. Otherwise outputs 1.',
-      eval: (a, b) => (a === 1 && b === 1 ? 0 : 1),
-      table: [
+      formula2: 'Y = (A · B)̅',
+      formula3: 'Y = (A · B · C)̅',
+      summary2: 'Outputs 0 (LOW) only when both inputs are 1. Otherwise outputs 1.',
+      summary3: 'Outputs 0 (LOW) only when all 3 inputs are 1. Otherwise outputs 1.',
+      eval2: (a, b) => (a === 1 && b === 1 ? 0 : 1),
+      eval3: (a, b, c) => (a === 1 && b === 1 && c === 1 ? 0 : 1),
+      table2: [
         { a: 0, b: 0, y: 1 },
         { a: 0, b: 1, y: 1 },
         { a: 1, b: 0, y: 1 },
         { a: 1, b: 1, y: 0 }
+      ],
+      table3: [
+        { a: 0, b: 0, c: 0, y: 1 },
+        { a: 0, b: 0, c: 1, y: 1 },
+        { a: 0, b: 1, c: 0, y: 1 },
+        { a: 0, b: 1, c: 1, y: 1 },
+        { a: 1, b: 0, c: 0, y: 1 },
+        { a: 1, b: 0, c: 1, y: 1 },
+        { a: 1, b: 1, c: 0, y: 1 },
+        { a: 1, b: 1, c: 1, y: 0 }
       ],
       note: 'Universal Gate: Any boolean function can be built exclusively using NAND gates.',
       svg: `
@@ -166,16 +213,29 @@
       category: 'Universal Gate',
       categoryType: 'universal',
       inputs: 2,
-      formula: 'Y = (A + B)̅',
-      summary: 'Outputs 1 (HIGH) only when both inputs are 0. Otherwise outputs 0.',
-      eval: (a, b) => (a === 0 && b === 0 ? 1 : 0),
-      table: [
+      formula2: 'Y = (A + B)̅',
+      formula3: 'Y = (A + B + C)̅',
+      summary2: 'Outputs 1 (HIGH) only when both inputs are 0. Otherwise outputs 0.',
+      summary3: 'Outputs 1 (HIGH) only when all 3 inputs are 0. Otherwise outputs 0.',
+      eval2: (a, b) => (a === 0 && b === 0 ? 1 : 0),
+      eval3: (a, b, c) => (a === 0 && b === 0 && c === 0 ? 1 : 0),
+      table2: [
         { a: 0, b: 0, y: 1 },
         { a: 0, b: 1, y: 0 },
         { a: 1, b: 0, y: 0 },
         { a: 1, b: 1, y: 0 }
       ],
-      note: 'Universal Gate: De Morgan’s equivalent is (A + B)̅ = A̅ · B̅.',
+      table3: [
+        { a: 0, b: 0, c: 0, y: 1 },
+        { a: 0, b: 0, c: 1, y: 0 },
+        { a: 0, b: 1, c: 0, y: 0 },
+        { a: 0, b: 1, c: 1, y: 0 },
+        { a: 1, b: 0, c: 0, y: 0 },
+        { a: 1, b: 0, c: 1, y: 0 },
+        { a: 1, b: 1, c: 0, y: 0 },
+        { a: 1, b: 1, c: 1, y: 0 }
+      ],
+      note: 'Universal Gate: De Morgan’s equivalent is (A + B + C)̅ = A̅ · B̅ · C̅.',
       svg: `
         <path d="M 0 10 Q 25 90 0 170 Q 65 165 135 90 Q 65 15 0 10 Z" class="gate-body-path" />
         <circle cx="145" cy="90" r="9" class="gate-bubble" />
@@ -195,16 +255,29 @@
       category: 'Exclusive Gate',
       categoryType: 'exclusive',
       inputs: 2,
-      formula: 'Y = A ⊕ B',
-      summary: 'Outputs 1 (HIGH) when inputs are DIFFERENT (one is 1, the other is 0).',
-      eval: (a, b) => (a ^ b),
-      table: [
+      formula2: 'Y = A ⊕ B',
+      formula3: 'Y = A ⊕ B ⊕ C',
+      summary2: 'Outputs 1 (HIGH) when inputs are DIFFERENT (one is 1, the other is 0).',
+      summary3: 'Outputs 1 (HIGH) when an ODD number of inputs are 1 (e.g. exactly one input is 1, or all three are 1).',
+      eval2: (a, b) => (a ^ b),
+      eval3: (a, b, c) => ((a + b + c) % 2),
+      table2: [
         { a: 0, b: 0, y: 0 },
         { a: 0, b: 1, y: 1 },
         { a: 1, b: 0, y: 1 },
         { a: 1, b: 1, y: 0 }
       ],
-      note: 'Arithmetic building block: Generates the Sum bit in binary Half Adders.',
+      table3: [
+        { a: 0, b: 0, c: 0, y: 0 },
+        { a: 0, b: 0, c: 1, y: 1 },
+        { a: 0, b: 1, c: 0, y: 1 },
+        { a: 0, b: 1, c: 1, y: 0 },
+        { a: 1, b: 0, c: 0, y: 1 },
+        { a: 1, b: 0, c: 1, y: 0 },
+        { a: 1, b: 1, c: 0, y: 0 },
+        { a: 1, b: 1, c: 1, y: 1 }
+      ],
+      note: 'Odd parity function: Generates 1 when an odd count of inputs are HIGH.',
       svg: `
         <path d="M -12 10 Q 18 90 -12 170" class="schematic-wire" fill="none" stroke-width="3" />
         <path d="M 5 10 Q 35 90 5 170 Q 80 165 150 90 Q 80 15 5 10 Z" class="gate-body-path" />
@@ -224,16 +297,29 @@
       category: 'Exclusive Gate',
       categoryType: 'exclusive',
       inputs: 2,
-      formula: 'Y = (A ⊕ B)̅',
-      summary: 'Outputs 1 (HIGH) when inputs are IDENTICAL (both 0 or both 1).',
-      eval: (a, b) => (a === b ? 1 : 0),
-      table: [
+      formula2: 'Y = (A ⊕ B)̅',
+      formula3: 'Y = (A ⊕ B ⊕ C)̅',
+      summary2: 'Outputs 1 (HIGH) when inputs are IDENTICAL (both 0 or both 1).',
+      summary3: 'Outputs 1 (HIGH) when an EVEN number of inputs are 1 (e.g. all 0s, or exactly two inputs are 1).',
+      eval2: (a, b) => (a === b ? 1 : 0),
+      eval3: (a, b, c) => ((a + b + c) % 2 === 0 ? 1 : 0),
+      table2: [
         { a: 0, b: 0, y: 1 },
         { a: 0, b: 1, y: 0 },
         { a: 1, b: 0, y: 0 },
         { a: 1, b: 1, y: 1 }
       ],
-      note: 'Equivalence comparator: Checks whether two digital bits are equal.',
+      table3: [
+        { a: 0, b: 0, c: 0, y: 1 },
+        { a: 0, b: 0, c: 1, y: 0 },
+        { a: 0, b: 1, c: 0, y: 0 },
+        { a: 0, b: 1, c: 1, y: 1 },
+        { a: 1, b: 0, c: 0, y: 0 },
+        { a: 1, b: 0, c: 1, y: 1 },
+        { a: 1, b: 1, c: 0, y: 1 },
+        { a: 1, b: 1, c: 1, y: 0 }
+      ],
+      note: 'Even parity function: Outputs 1 when an even count of inputs are HIGH.',
       svg: `
         <path d="M -12 10 Q 18 90 -12 170" class="schematic-wire" fill="none" stroke-width="3" />
         <path d="M 5 10 Q 35 90 5 170 Q 75 165 135 90 Q 75 15 5 10 Z" class="gate-body-path" />
@@ -252,11 +338,44 @@
   ];
 
   // --- Natural Plain-English Explanations ---
-  function getExplanation(gateId, a, b, y) {
+  function getExplanation(gateId, a, b, c, y, mode) {
+    if (mode === 3 && gateId !== 'not') {
+      const count = a + b + c;
+      switch (gateId) {
+        case 'and':
+          return (a === 1 && b === 1 && c === 1)
+            ? 'All three inputs (A, B, and C) are 1 (HIGH). The 3-input AND gate requires all inputs to be active, so output is 1.'
+            : 'At least one input is 0 (LOW). Since all three inputs must be 1 for a 3-input AND gate, the output is 0.';
+        case 'or':
+          return (a === 1 || b === 1 || c === 1)
+            ? 'At least one input is 1 (HIGH). The 3-input OR condition ("any active signal") is satisfied, producing an output of 1.'
+            : 'All three inputs are 0 (LOW). The 3-input OR gate produces 0 only when all inputs are inactive.';
+        case 'nand':
+          return (a === 1 && b === 1 && c === 1)
+            ? 'All three inputs are 1, making the AND product 1. The 3-input NAND gate inverts this to 0.'
+            : 'At least one input is 0, so the AND product is 0. The inverted NAND output is 1.';
+        case 'nor':
+          return (a === 0 && b === 0 && c === 0)
+            ? 'All three inputs are 0, making the OR sum 0. The 3-input NOR gate inverts this to 1.'
+            : 'At least one input is 1, making the OR sum 1. The inverted NOR output is 0.';
+        case 'xor':
+          return (count % 2 === 1)
+            ? `${count} of the 3 inputs are 1 (an ODD number of 1s). The 3-input XOR (odd parity) gate produces 1.`
+            : `${count === 0 ? 'All inputs are 0' : 'Two inputs are 1'} (an EVEN number of 1s). The 3-input XOR gate produces 0.`;
+        case 'xnor':
+          return (count % 2 === 0)
+            ? `${count === 0 ? 'All inputs are 0' : 'Two inputs are 1'} (an EVEN number of 1s). The 3-input XNOR (even parity) gate produces 1.`
+            : `${count} inputs are 1 (an ODD number of 1s). The 3-input XNOR gate produces 0.`;
+        default:
+          return `Output is ${y}.`;
+      }
+    }
+
+    // 2-Input / 1-Input Standard Explanations
     switch (gateId) {
       case 'and':
         if (a === 1 && b === 1) {
-          return 'Both Input A and Input B are 1 (HIGH). Because the AND condition requires all inputs to be 1, the circuit closes and produces 1.';
+          return 'Both Input A and Input B are 1 (HIGH). Because the AND condition requires all inputs to be 1, output is 1.';
         } else if (a === 0 && b === 0) {
           return 'Both inputs are 0 (LOW). Since neither input is active, the AND gate produces an output of 0.';
         } else {
@@ -305,9 +424,17 @@
     }
   }
 
-  function getCalculationString(gate, a, b, y) {
+  function getCalculationString(gate, a, b, c, y, mode) {
     if (gate.inputs === 1) {
       return `${a}̅ = ${y}`;
+    }
+    if (mode === 3) {
+      if (gate.id === 'and') return `${a} · ${b} · ${c} = ${y}`;
+      if (gate.id === 'or') return `${a} + ${b} + ${c} = ${y}`;
+      if (gate.id === 'nand') return `(${a} · ${b} · ${c})̅ = ${y}`;
+      if (gate.id === 'nor') return `(${a} + ${b} + ${c})̅ = ${y}`;
+      if (gate.id === 'xor') return `${a} ⊕ ${b} ⊕ ${c} = ${y}`;
+      if (gate.id === 'xnor') return `(${a} ⊕ ${b} ⊕ ${c})̅ = ${y}`;
     }
     const symbolMap = { and: '·', or: '+', nand: '·', nor: '+', xor: '⊕', xnor: '⊙' };
     const s = symbolMap[gate.id] || '·';
@@ -321,8 +448,10 @@
   const state = {
     currentView: 'simulator',
     gateId: 'and',
+    inputMode: 2, // 2 or 3 inputs
     inputA: 0,
     inputB: 0,
+    inputC: 0,
     liveUpdate: true,
     clockRunning: false,
     clockTimer: null,
@@ -330,7 +459,8 @@
 
     // Multi-Gate Tab State
     multiA: 0,
-    multiB: 0
+    multiB: 0,
+    multiC: 0
   };
 
   // --- DOM Elements ---
@@ -348,23 +478,34 @@
     gateSummary: document.getElementById('gateSummary'),
     gateEquationCode: document.getElementById('gateEquationCode'),
 
+    // Input Mode Selector (2 vs 3 inputs)
+    mode2Btn: document.getElementById('mode2Btn'),
+    mode3Btn: document.getElementById('mode3Btn'),
+
     // Input Terminal Blocks
+    terminalsSide: document.getElementById('terminalsSide'),
     terminalBlockA: document.getElementById('terminalBlockA'),
     terminalBlockB: document.getElementById('terminalBlockB'),
+    terminalBlockC: document.getElementById('terminalBlockC'),
     badgeInputA: document.getElementById('badgeInputA'),
     badgeInputB: document.getElementById('badgeInputB'),
+    badgeInputC: document.getElementById('badgeInputC'),
     rockerSwitchA: document.getElementById('rockerSwitchA'),
     rockerSwitchB: document.getElementById('rockerSwitchB'),
+    rockerSwitchC: document.getElementById('rockerSwitchC'),
     singleInputNotice: document.getElementById('singleInputNotice'),
     autoUpdateCheckbox: document.getElementById('autoUpdateCheckbox'),
 
     // Schematic Wires & Nodes
     wireA: document.getElementById('wireA'),
     wireB: document.getElementById('wireB'),
+    wireC: document.getElementById('wireC'),
     nodeA: document.getElementById('nodeA'),
     nodeB: document.getElementById('nodeB'),
+    nodeC: document.getElementById('nodeC'),
     wireTextA: document.getElementById('wireTextA'),
     wireTextB: document.getElementById('wireTextB'),
+    wireTextC: document.getElementById('wireTextC'),
     wireOut: document.getElementById('wireOut'),
     nodeOut: document.getElementById('nodeOut'),
     wireTextOut: document.getElementById('wireTextOut'),
@@ -380,6 +521,7 @@
     runClockCycleBtn: document.getElementById('runClockCycleBtn'),
     clearWaveformBtn: document.getElementById('clearWaveformBtn'),
     legendB: document.getElementById('legendB'),
+    legendC: document.getElementById('legendC'),
 
     // Presets & Buttons
     presetPills: document.getElementById('presetPills'),
@@ -396,10 +538,12 @@
 
     // Truth Table
     thB: document.getElementById('thB'),
+    thC: document.getElementById('thC'),
     truthTableBody: document.getElementById('truthTableBody'),
     gateNotesBody: document.getElementById('gateNotesBody'),
 
     // Differentiation Tab Elements
+    multiUnitC: document.getElementById('multiUnitC'),
     multiOutputGrid: document.getElementById('multiOutputGrid'),
     comparativeBarCanvas: document.getElementById('comparativeBarCanvas'),
     btnPreset00: document.getElementById('btnPreset00'),
@@ -448,18 +592,36 @@
     }
   }
 
+  // Switch Input Mode (2-Input vs 3-Input)
+  function setInputMode(mode) {
+    state.inputMode = mode;
+    if (DOM.mode2Btn) DOM.mode2Btn.classList.toggle('active', mode === 2);
+    if (DOM.mode3Btn) DOM.mode3Btn.classList.toggle('active', mode === 3);
+
+    renderGateTabs();
+    const gate = getActiveGate();
+    selectGate(gate.id);
+  }
+
   // Render Step 1 Gate Selection Tabs
   function renderGateTabs() {
     DOM.gateGrid.innerHTML = '';
+    const is3In = state.inputMode === 3;
+
     GATES.forEach(gate => {
       const tab = document.createElement('div');
       tab.className = `gate-card-tab ${gate.id === state.gateId ? 'active' : ''}`;
       tab.dataset.gate = gate.id;
       tab.setAttribute('role', 'tab');
+
+      const formulaDisplay = (is3In && gate.inputs !== 1)
+        ? gate.formula3.replace('Y = ', '')
+        : gate.formula2.replace('Y = ', '');
+
       tab.innerHTML = `
         ${gate.tabSvg}
         <span class="tab-name">${gate.name.replace(' Gate', '')}</span>
-        <span class="tab-formula">${gate.formula.replace('Y = ', '')}</span>
+        <span class="tab-formula">${formulaDisplay}</span>
       `;
       tab.addEventListener('click', () => {
         selectGate(gate.id);
@@ -480,43 +642,111 @@
     const tabs = DOM.gateGrid.querySelectorAll('.gate-card-tab');
     tabs.forEach(t => t.classList.toggle('active', t.dataset.gate === gateId));
 
-    // Update Banner
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
+
+    // Update Banner Heading, Formula & Summary
     DOM.gateTypeBadge.textContent = gate.category;
-    DOM.gateHeading.textContent = gate.name;
-    DOM.gateSummary.textContent = gate.summary;
-    DOM.gateEquationCode.textContent = gate.formula;
+    DOM.gateHeading.textContent = is3In ? `3-Input ${gate.name}` : gate.name;
+    DOM.gateSummary.textContent = is3In ? gate.summary3 : gate.summary2;
+    DOM.gateEquationCode.textContent = is3In ? gate.formula3 : gate.formula2;
     DOM.gateNotesBody.textContent = gate.note;
 
     // Inject schematic SVG path
     DOM.schematicGateContainer.innerHTML = gate.svg;
 
-    // Adjust for single-input NOT gate
-    const isSingle = gate.inputs === 1;
+    // Adjust Terminals and Schematic Routing
     if (isSingle) {
+      // 1-Input NOT Gate
+      if (DOM.terminalsSide) DOM.terminalsSide.classList.remove('is-3-input');
       DOM.terminalBlockB.classList.add('hidden');
+      if (DOM.terminalBlockC) DOM.terminalBlockC.classList.add('hidden');
       DOM.singleInputNotice.classList.remove('hidden');
-      DOM.legendB.style.display = 'none';
-      DOM.thB.style.display = 'none';
 
-      // Route Wire A cleanly straight into center of NOT gate
+      DOM.legendB.style.display = 'none';
+      if (DOM.legendC) DOM.legendC.style.display = 'none';
+      DOM.thB.style.display = 'none';
+      if (DOM.thC) DOM.thC.style.display = 'none';
+
+      // Route Wire A into center
       DOM.wireA.setAttribute('d', 'M 10 100 L 150 100');
       DOM.nodeA.setAttribute('cy', '100');
       DOM.wireTextA.setAttribute('y', '90');
+
       DOM.wireB.style.display = 'none';
       DOM.nodeB.style.display = 'none';
       DOM.wireTextB.style.display = 'none';
-    } else {
-      DOM.terminalBlockB.classList.remove('hidden');
-      DOM.singleInputNotice.classList.add('hidden');
-      DOM.legendB.style.display = 'inline-flex';
-      DOM.thB.style.display = 'table-cell';
 
-      DOM.wireA.setAttribute('d', 'M 10 50 L 140 50');
-      DOM.nodeA.setAttribute('cy', '50');
-      DOM.wireTextA.setAttribute('y', '40');
+      if (DOM.wireC) {
+        DOM.wireC.style.display = 'none';
+        DOM.nodeC.style.display = 'none';
+        DOM.wireTextC.style.display = 'none';
+      }
+    } else if (is3In) {
+      // 3-Input Gate
+      if (DOM.terminalsSide) DOM.terminalsSide.classList.add('is-3-input');
+      DOM.terminalBlockB.classList.remove('hidden');
+      if (DOM.terminalBlockC) DOM.terminalBlockC.classList.remove('hidden');
+      DOM.singleInputNotice.classList.add('hidden');
+
+      DOM.legendB.style.display = 'inline-flex';
+      if (DOM.legendC) DOM.legendC.style.display = 'inline-flex';
+      DOM.thB.style.display = 'table-cell';
+      if (DOM.thC) DOM.thC.style.display = 'table-cell';
+
+      // Route Wire A at y=40, Wire B at y=100, Wire C at y=160
+      DOM.wireA.setAttribute('d', 'M 10 40 L 140 40');
+      DOM.nodeA.setAttribute('cy', '40');
+      DOM.wireTextA.setAttribute('y', '32');
+
+      DOM.wireB.setAttribute('d', 'M 10 100 L 140 100');
+      DOM.nodeB.setAttribute('cy', '100');
+      DOM.wireTextB.setAttribute('y', '92');
       DOM.wireB.style.display = 'block';
       DOM.nodeB.style.display = 'block';
       DOM.wireTextB.style.display = 'block';
+
+      if (DOM.wireC) {
+        DOM.wireC.setAttribute('d', 'M 10 160 L 140 160');
+        DOM.nodeC.setAttribute('cy', '160');
+        DOM.wireTextC.setAttribute('y', '152');
+        DOM.wireC.style.display = 'block';
+        DOM.nodeC.style.display = 'block';
+        DOM.wireTextC.style.display = 'block';
+      }
+    } else {
+      // Standard 2-Input Gate
+      if (DOM.terminalsSide) DOM.terminalsSide.classList.remove('is-3-input');
+      DOM.terminalBlockB.classList.remove('hidden');
+      if (DOM.terminalBlockC) DOM.terminalBlockC.classList.add('hidden');
+      DOM.singleInputNotice.classList.add('hidden');
+
+      DOM.legendB.style.display = 'inline-flex';
+      if (DOM.legendC) DOM.legendC.style.display = 'none';
+      DOM.thB.style.display = 'table-cell';
+      if (DOM.thC) DOM.thC.style.display = 'none';
+
+      // Route Wire A at y=50, Wire B at y=150
+      DOM.wireA.setAttribute('d', 'M 10 50 L 140 50');
+      DOM.nodeA.setAttribute('cy', '50');
+      DOM.wireTextA.setAttribute('y', '40');
+
+      DOM.wireB.setAttribute('d', 'M 10 150 L 140 150');
+      DOM.nodeB.setAttribute('cy', '150');
+      DOM.wireTextB.setAttribute('y', '140');
+      DOM.wireB.style.display = 'block';
+      DOM.nodeB.style.display = 'block';
+      DOM.wireTextB.style.display = 'block';
+
+      if (DOM.wireC) {
+        DOM.wireC.style.display = 'none';
+        DOM.nodeC.style.display = 'none';
+        DOM.wireTextC.style.display = 'none';
+      }
+    }
+
+    if (DOM.runClockCycleBtn) {
+      DOM.runClockCycleBtn.querySelector('span').textContent = is3In ? '▶ Run 8-Step Clock' : '▶ Run 4-Step Clock';
     }
 
     renderPresetButtons(gate);
@@ -527,7 +757,10 @@
   // Render Preset Combination Buttons
   function renderPresetButtons(gate) {
     DOM.presetPills.innerHTML = '';
-    if (gate.inputs === 1) {
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
+
+    if (isSingle) {
       const presets = [
         { label: 'A = 0', a: 0 },
         { label: 'A = 1', a: 1 }
@@ -540,6 +773,33 @@
         btn.addEventListener('click', () => {
           state.inputA = p.a;
           AudioEngine.playClick(p.a === 1);
+          syncInputControls();
+          evaluateCircuit();
+        });
+        DOM.presetPills.appendChild(btn);
+      });
+    } else if (is3In) {
+      const presets = [
+        { label: '0, 0, 0', a: 0, b: 0, c: 0 },
+        { label: '0, 0, 1', a: 0, b: 0, c: 1 },
+        { label: '0, 1, 0', a: 0, b: 1, c: 0 },
+        { label: '0, 1, 1', a: 0, b: 1, c: 1 },
+        { label: '1, 0, 0', a: 1, b: 0, c: 0 },
+        { label: '1, 0, 1', a: 1, b: 0, c: 1 },
+        { label: '1, 1, 0', a: 1, b: 1, c: 0 },
+        { label: '1, 1, 1', a: 1, b: 1, c: 1 }
+      ];
+      presets.forEach(p => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        const isMatch = state.inputA === p.a && state.inputB === p.b && state.inputC === p.c;
+        btn.className = `preset-pill ${isMatch ? 'active' : ''}`;
+        btn.textContent = p.label;
+        btn.addEventListener('click', () => {
+          state.inputA = p.a;
+          state.inputB = p.b;
+          state.inputC = p.c;
+          AudioEngine.playClick(p.a || p.b || p.c);
           syncInputControls();
           evaluateCircuit();
         });
@@ -576,19 +836,36 @@
     btnsA.forEach(b => b.classList.toggle('active', parseInt(b.dataset.bit, 10) === state.inputA));
     DOM.terminalBlockA.classList.toggle('is-high', state.inputA === 1);
     DOM.badgeInputA.textContent = state.inputA ? '1 (HIGH)' : '0 (LOW)';
+    DOM.rockerSwitchA.classList.toggle('active', state.inputA === 1);
 
     // Input B
     const btnsB = DOM.terminalBlockB.querySelectorAll('.bit-btn');
     btnsB.forEach(b => b.classList.toggle('active', parseInt(b.dataset.bit, 10) === state.inputB));
     DOM.terminalBlockB.classList.toggle('is-high', state.inputB === 1);
     DOM.badgeInputB.textContent = state.inputB ? '1 (HIGH)' : '0 (LOW)';
+    DOM.rockerSwitchB.classList.toggle('active', state.inputB === 1);
+
+    // Input C
+    if (DOM.terminalBlockC) {
+      const btnsC = DOM.terminalBlockC.querySelectorAll('.bit-btn');
+      btnsC.forEach(b => b.classList.toggle('active', parseInt(b.dataset.bit, 10) === state.inputC));
+      DOM.terminalBlockC.classList.toggle('is-high', state.inputC === 1);
+      DOM.badgeInputC.textContent = state.inputC ? '1 (HIGH)' : '0 (LOW)';
+      DOM.rockerSwitchC.classList.toggle('active', state.inputC === 1);
+    }
 
     // Preset pills highlight
     const gate = getActiveGate();
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
     const pills = DOM.presetPills.querySelectorAll('.preset-pill');
+
     pills.forEach(p => {
-      if (gate.inputs === 1) {
+      if (isSingle) {
         p.classList.toggle('active', p.textContent.includes(String(state.inputA)));
+      } else if (is3In) {
+        const expected = `${state.inputA}, ${state.inputB}, ${state.inputC}`;
+        p.classList.toggle('active', p.textContent === expected);
       } else {
         p.classList.toggle('active', p.textContent === `A=${state.inputA}, B=${state.inputB}`);
       }
@@ -598,9 +875,16 @@
   // Calculate and Update Circuit Schematic, Output & Graph
   function evaluateCircuit() {
     const gate = getActiveGate();
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
+
     const a = state.inputA;
-    const b = gate.inputs === 1 ? 0 : state.inputB;
-    const output = gate.eval(a, b);
+    const b = isSingle ? 0 : state.inputB;
+    const c = is3In ? state.inputC : 0;
+
+    const output = isSingle
+      ? gate.eval2(a)
+      : (is3In ? gate.eval3(a, b, c) : gate.eval2(a, b));
 
     syncInputControls();
 
@@ -610,11 +894,18 @@
     DOM.wireTextA.classList.toggle('is-high', a === 1);
     DOM.wireTextA.textContent = `A = ${a}`;
 
-    if (gate.inputs === 2) {
+    if (!isSingle) {
       DOM.wireB.classList.toggle('is-high', b === 1);
       DOM.nodeB.classList.toggle('is-high', b === 1);
       DOM.wireTextB.classList.toggle('is-high', b === 1);
       DOM.wireTextB.textContent = `B = ${b}`;
+    }
+
+    if (is3In && DOM.wireC) {
+      DOM.wireC.classList.toggle('is-high', c === 1);
+      DOM.nodeC.classList.toggle('is-high', c === 1);
+      DOM.wireTextC.classList.toggle('is-high', c === 1);
+      DOM.wireTextC.textContent = `C = ${c}`;
     }
 
     DOM.wireOut.classList.toggle('is-high', output === 1);
@@ -639,31 +930,35 @@
     DOM.resStateText.textContent = output ? 'HIGH (1)' : 'LOW (0)';
     DOM.resVoltageText.textContent = output ? '5.0 Volts (VCC)' : '0.0 Volts (GND)';
 
-    DOM.breakdownCode.textContent = getCalculationString(gate, a, b, output);
-    DOM.explanationParagraph.textContent = getExplanation(gate.id, a, b, output);
+    DOM.breakdownCode.textContent = getCalculationString(gate, a, b, c, output, is3In ? 3 : 2);
+    DOM.explanationParagraph.textContent = getExplanation(gate.id, a, b, c, output, is3In ? 3 : 2);
 
     // 4. Highlight Truth Table row
-    highlightTruthTableRow(a, b);
+    highlightTruthTableRow(a, b, c);
 
     // 5. Push point to Waveform Graph history & redraw graph
-    recordWaveformSample(a, b, output);
+    recordWaveformSample(a, b, c, output);
   }
 
   // --- Waveform Timing Graph Engine ---
   function initWaveformHistory() {
     state.waveformSamples = [];
     const gate = getActiveGate();
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
     const a = state.inputA;
-    const b = gate.inputs === 1 ? 0 : state.inputB;
-    const y = gate.eval(a, b);
+    const b = isSingle ? 0 : state.inputB;
+    const c = is3In ? state.inputC : 0;
+    const y = isSingle ? gate.eval2(a) : (is3In ? gate.eval3(a, b, c) : gate.eval2(a, b));
+
     for (let i = 0; i < 24; i++) {
-      state.waveformSamples.push({ a, b, y });
+      state.waveformSamples.push({ a, b, c, y });
     }
   }
 
-  function recordWaveformSample(a, b, y) {
-    state.waveformSamples.push({ a, b, y });
-    if (state.waveformSamples.length > 36) {
+  function recordWaveformSample(a, b, c, y) {
+    state.waveformSamples.push({ a, b, c, y });
+    if (state.waveformSamples.length > 50) {
       state.waveformSamples.shift();
     }
     renderWaveformGraph();
@@ -675,23 +970,35 @@
     const h = DOM.waveformCanvas.height;
     const gate = getActiveGate();
     const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
 
     waveCtx.clearRect(0, 0, w, h);
 
-    // Background horizontal rail lines (0V and 5V reference guides)
+    // Track channels configuration
+    let tracks;
+    if (isSingle) {
+      tracks = [
+        { name: 'A', highY: 28, lowY: 62, color: '#f59e0b' },
+        { name: 'Y', highY: 105, lowY: 145, color: '#10b981' }
+      ];
+    } else if (is3In) {
+      tracks = [
+        { name: 'A', highY: 16, lowY: 36, color: '#f59e0b' },
+        { name: 'B', highY: 54, lowY: 74, color: '#a855f7' },
+        { name: 'C', highY: 92, lowY: 112, color: '#06b6d4' },
+        { name: 'Y', highY: 136, lowY: 162, color: '#10b981' }
+      ];
+    } else {
+      tracks = [
+        { name: 'A', highY: 22, lowY: 48, color: '#f59e0b' },
+        { name: 'B', highY: 72, lowY: 98, color: '#a855f7' },
+        { name: 'Y', highY: 124, lowY: 154, color: '#10b981' }
+      ];
+    }
+
+    // Rail Guides
     waveCtx.strokeStyle = 'rgba(255, 255, 255, 0.06)';
     waveCtx.lineWidth = 1;
-
-    const tracks = isSingle
-      ? [
-          { name: 'A', highY: 28, lowY: 62, color: '#f59e0b' },
-          { name: 'Y', highY: 105, lowY: 145, color: '#10b981' }
-        ]
-      : [
-          { name: 'A', highY: 22, lowY: 48, color: '#f59e0b' },
-          { name: 'B', highY: 72, lowY: 98, color: '#a855f7' },
-          { name: 'Y', highY: 124, lowY: 154, color: '#10b981' }
-        ];
 
     tracks.forEach(tr => {
       // Dotted high rail (5V)
@@ -708,7 +1015,7 @@
       waveCtx.stroke();
       waveCtx.setLineDash([]);
 
-      // Track label (A, B, Y)
+      // Track label
       waveCtx.fillStyle = tr.color;
       waveCtx.font = '600 11px Inter, sans-serif';
       waveCtx.fillText(`${tr.name}:`, 12, (tr.highY + tr.lowY) / 2 + 4);
@@ -729,12 +1036,13 @@
       waveCtx.lineCap = 'round';
       waveCtx.lineJoin = 'miter';
 
-      let prevVal = samples[0][tr.name.toLowerCase()];
+      const key = tr.name.toLowerCase();
+      let prevVal = samples[0][key] || 0;
       let prevY = prevVal === 1 ? tr.highY : tr.lowY;
       waveCtx.moveTo(startX, prevY);
 
       for (let i = 1; i < samples.length; i++) {
-        const curVal = samples[i][tr.name.toLowerCase()];
+        const curVal = samples[i][key] || 0;
         const curY = curVal === 1 ? tr.highY : tr.lowY;
         const curX = startX + i * stepX;
 
@@ -751,34 +1059,51 @@
     });
   }
 
-  // Simulate 4-step Clock Sequence (00 -> 01 -> 10 -> 11)
+  // Simulate Clock Sequence
   function runClockCycleSequence() {
     if (state.clockRunning) return;
     state.clockRunning = true;
-    DOM.runClockCycleBtn.textContent = '⏹ Running Clock...';
+    DOM.runClockCycleBtn.querySelector('span').textContent = '⏹ Running Clock...';
 
     const gate = getActiveGate();
-    const seq = gate.inputs === 1
-      ? [{ a: 0, b: 0 }, { a: 1, b: 0 }, { a: 0, b: 0 }, { a: 1, b: 0 }]
-      : [{ a: 0, b: 0 }, { a: 0, b: 1 }, { a: 1, b: 0 }, { a: 1, b: 1 }];
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
+
+    let seq;
+    if (isSingle) {
+      seq = [{ a: 0, b: 0, c: 0 }, { a: 1, b: 0, c: 0 }, { a: 0, b: 0, c: 0 }, { a: 1, b: 0, c: 0 }];
+    } else if (is3In) {
+      seq = [
+        { a: 0, b: 0, c: 0 }, { a: 0, b: 0, c: 1 },
+        { a: 0, b: 1, c: 0 }, { a: 0, b: 1, c: 1 },
+        { a: 1, b: 0, c: 0 }, { a: 1, b: 0, c: 1 },
+        { a: 1, b: 1, c: 0 }, { a: 1, b: 1, c: 1 }
+      ];
+    } else {
+      seq = [
+        { a: 0, b: 0, c: 0 }, { a: 0, b: 1, c: 0 },
+        { a: 1, b: 0, c: 0 }, { a: 1, b: 1, c: 0 }
+      ];
+    }
 
     let step = 0;
     state.clockTimer = setInterval(() => {
       if (step >= seq.length) {
         clearInterval(state.clockTimer);
         state.clockRunning = false;
-        DOM.runClockCycleBtn.textContent = '▶ Run 4-Step Clock';
+        DOM.runClockCycleBtn.querySelector('span').textContent = is3In ? '▶ Run 8-Step Clock' : '▶ Run 4-Step Clock';
         return;
       }
       state.inputA = seq[step].a;
       state.inputB = seq[step].b;
-      AudioEngine.playClick(state.inputA || state.inputB);
+      state.inputC = seq[step].c;
+      AudioEngine.playClick(state.inputA || state.inputB || state.inputC);
       evaluateCircuit();
       step++;
-    }, 700);
+    }, 650);
   }
 
-  // --- Differentiation Tab Multi-Gate Engine ---
+  // --- Multi-Gate Differentiation Tab ---
   function renderMultiOutputGrid() {
     DOM.multiOutputGrid.innerHTML = '';
     GATES.forEach(gate => {
@@ -795,23 +1120,27 @@
     updateMultiGateOutputs();
   }
 
-  function setMultiInputs(a, b) {
+  function setMultiInputs(a, b, c) {
     state.multiA = a;
     state.multiB = b;
+    if (c !== undefined) state.multiC = c;
 
     // Update bit buttons in differentiation tab
     document.querySelectorAll('.multi-bit-btn').forEach(btn => {
       const term = btn.dataset.terminal;
       const bit = parseInt(btn.dataset.bit, 10);
-      const isMatch = term === 'a' ? bit === a : bit === b;
+      let isMatch = false;
+      if (term === 'a') isMatch = (bit === state.multiA);
+      else if (term === 'b') isMatch = (bit === state.multiB);
+      else if (term === 'c') isMatch = (bit === state.multiC);
       btn.classList.toggle('active', isMatch);
     });
 
     // Update preset pills
-    DOM.btnPreset00.classList.toggle('active', a === 0 && b === 0);
-    DOM.btnPreset01.classList.toggle('active', a === 0 && b === 1);
-    DOM.btnPreset10.classList.toggle('active', a === 1 && b === 0);
-    DOM.btnPreset11.classList.toggle('active', a === 1 && b === 1);
+    if (DOM.btnPreset00) DOM.btnPreset00.classList.toggle('active', state.multiA === 0 && state.multiB === 0 && state.multiC === 0);
+    if (DOM.btnPreset01) DOM.btnPreset01.classList.toggle('active', state.multiA === 0 && state.multiB === 1 && state.multiC === 0);
+    if (DOM.btnPreset10) DOM.btnPreset10.classList.toggle('active', state.multiA === 1 && state.multiB === 1 && state.multiC === 0);
+    if (DOM.btnPreset11) DOM.btnPreset11.classList.toggle('active', state.multiA === 1 && state.multiB === 1 && state.multiC === 1);
 
     updateMultiGateOutputs();
     updateComparativeGraph();
@@ -820,6 +1149,7 @@
   function updateMultiGateOutputs() {
     const a = state.multiA;
     const b = state.multiB;
+    const c = state.multiC;
 
     GATES.forEach(gate => {
       const card = document.getElementById(`multiCard_${gate.id}`);
@@ -827,7 +1157,10 @@
       const stateEl = document.getElementById(`multiState_${gate.id}`);
       if (!card || !valEl || !stateEl) return;
 
-      const y = gate.inputs === 1 ? gate.eval(a) : gate.eval(a, b);
+      const y = gate.inputs === 1
+        ? gate.eval2(a)
+        : (state.inputMode === 3 ? gate.eval3(a, b, c) : gate.eval2(a, b));
+
       card.classList.toggle('is-high', y === 1);
       valEl.textContent = y;
       stateEl.textContent = y ? 'HIGH (5V)' : 'LOW (0V)';
@@ -871,10 +1204,13 @@
 
     const a = state.multiA;
     const b = state.multiB;
+    const c = state.multiC;
     const colWidth = (w - 90) / GATES.length;
 
     GATES.forEach((gate, idx) => {
-      const y = gate.inputs === 1 ? gate.eval(a) : gate.eval(a, b);
+      const y = gate.inputs === 1
+        ? gate.eval2(a)
+        : (state.inputMode === 3 ? gate.eval3(a, b, c) : gate.eval2(a, b));
       const x = 70 + idx * colWidth;
       const barY = y === 1 ? highY : lowY;
 
@@ -904,19 +1240,29 @@
     compCtx.textAlign = 'left';
   }
 
-  // --- Truth Table ---
+  // --- Truth Table Engine ---
   function renderTruthTable(gate) {
     DOM.truthTableBody.innerHTML = '';
     const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
+    const tableData = isSingle ? gate.table2 : (is3In ? gate.table3 : gate.table2);
 
-    gate.table.forEach(row => {
+    tableData.forEach(row => {
       const tr = document.createElement('tr');
       tr.dataset.a = row.a;
       tr.dataset.b = isSingle ? 0 : row.b;
+      tr.dataset.c = is3In ? row.c : 0;
 
       if (isSingle) {
         tr.innerHTML = `
           <td><span class="row-badge ${row.a ? 'is-1' : 'is-0'}">${row.a}</span></td>
+          <td><span class="row-badge ${row.y ? 'is-1' : 'is-0'}">${row.y}</span></td>
+        `;
+      } else if (is3In) {
+        tr.innerHTML = `
+          <td><span class="row-badge ${row.a ? 'is-1' : 'is-0'}">${row.a}</span></td>
+          <td><span class="row-badge ${row.b ? 'is-1' : 'is-0'}">${row.b}</span></td>
+          <td><span class="row-badge ${row.c ? 'is-1' : 'is-0'}">${row.c}</span></td>
           <td><span class="row-badge ${row.y ? 'is-1' : 'is-0'}">${row.y}</span></td>
         `;
       } else {
@@ -931,6 +1277,7 @@
       tr.addEventListener('click', () => {
         state.inputA = row.a;
         if (!isSingle) state.inputB = row.b;
+        if (is3In) state.inputC = row.c;
         AudioEngine.playClick(true);
         evaluateCircuit();
       });
@@ -938,16 +1285,28 @@
       DOM.truthTableBody.appendChild(tr);
     });
 
-    highlightTruthTableRow(state.inputA, state.inputB);
+    highlightTruthTableRow(state.inputA, state.inputB, state.inputC);
   }
 
-  function highlightTruthTableRow(a, b) {
+  function highlightTruthTableRow(a, b, c) {
     const gate = getActiveGate();
+    const isSingle = gate.inputs === 1;
+    const is3In = state.inputMode === 3 && !isSingle;
     const rows = DOM.truthTableBody.querySelectorAll('tr');
+
     rows.forEach(tr => {
       const rowA = parseInt(tr.dataset.a, 10);
       const rowB = parseInt(tr.dataset.b, 10);
-      const isMatch = gate.inputs === 1 ? rowA === a : (rowA === a && rowB === b);
+      const rowC = parseInt(tr.dataset.c, 10);
+
+      let isMatch = false;
+      if (isSingle) {
+        isMatch = (rowA === a);
+      } else if (is3In) {
+        isMatch = (rowA === a && rowB === b && rowC === c);
+      } else {
+        isMatch = (rowA === a && rowB === b);
+      }
       tr.classList.toggle('row-active', isMatch);
     });
   }
@@ -957,6 +1316,10 @@
     // Top View Switchers
     DOM.tabSimulator.addEventListener('click', () => switchView('simulator'));
     DOM.tabDifferentiation.addEventListener('click', () => switchView('differentiation'));
+
+    // Input Mode Selector Tabs (2-Input vs 3-Input)
+    if (DOM.mode2Btn) DOM.mode2Btn.addEventListener('click', () => setInputMode(2));
+    if (DOM.mode3Btn) DOM.mode3Btn.addEventListener('click', () => setInputMode(3));
 
     // Input A Bit Buttons (0 and 1)
     DOM.terminalBlockA.querySelectorAll('.bit-btn').forEach(btn => {
@@ -978,6 +1341,18 @@
       });
     });
 
+    // Input C Bit Buttons (0 and 1)
+    if (DOM.terminalBlockC) {
+      DOM.terminalBlockC.querySelectorAll('.bit-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.inputC = parseInt(btn.dataset.bit, 10);
+          AudioEngine.playClick(state.inputC === 1);
+          if (state.liveUpdate) evaluateCircuit();
+          else syncInputControls();
+        });
+      });
+    }
+
     // Rocker Switch toggles
     DOM.rockerSwitchA.addEventListener('click', () => {
       state.inputA = state.inputA ? 0 : 1;
@@ -995,6 +1370,15 @@
       else syncInputControls();
     });
 
+    if (DOM.rockerSwitchC) {
+      DOM.rockerSwitchC.addEventListener('click', () => {
+        state.inputC = state.inputC ? 0 : 1;
+        AudioEngine.playClick(state.inputC === 1);
+        if (state.liveUpdate) evaluateCircuit();
+        else syncInputControls();
+      });
+    }
+
     // Manual Evaluate Output Button
     DOM.manualComputeBtn.addEventListener('click', () => {
       evaluateCircuit();
@@ -1005,6 +1389,7 @@
     DOM.resetBtn.addEventListener('click', () => {
       state.inputA = 0;
       state.inputB = 0;
+      state.inputC = 0;
       AudioEngine.playClick(false);
       evaluateCircuit();
     });
@@ -1027,16 +1412,17 @@
       btn.addEventListener('click', () => {
         const term = btn.dataset.terminal;
         const bit = parseInt(btn.dataset.bit, 10);
-        if (term === 'a') setMultiInputs(bit, state.multiB);
-        else setMultiInputs(state.multiA, bit);
+        if (term === 'a') setMultiInputs(bit, state.multiB, state.multiC);
+        else if (term === 'b') setMultiInputs(state.multiA, bit, state.multiC);
+        else if (term === 'c') setMultiInputs(state.multiA, state.multiB, bit);
         AudioEngine.playClick(bit === 1);
       });
     });
 
-    DOM.btnPreset00.addEventListener('click', () => setMultiInputs(0, 0));
-    DOM.btnPreset01.addEventListener('click', () => setMultiInputs(0, 1));
-    DOM.btnPreset10.addEventListener('click', () => setMultiInputs(1, 0));
-    DOM.btnPreset11.addEventListener('click', () => setMultiInputs(1, 1));
+    if (DOM.btnPreset00) DOM.btnPreset00.addEventListener('click', () => setMultiInputs(0, 0, 0));
+    if (DOM.btnPreset01) DOM.btnPreset01.addEventListener('click', () => setMultiInputs(0, 1, 0));
+    if (DOM.btnPreset10) DOM.btnPreset10.addEventListener('click', () => setMultiInputs(1, 1, 0));
+    if (DOM.btnPreset11) DOM.btnPreset11.addEventListener('click', () => setMultiInputs(1, 1, 1));
 
     // Sound toggle
     DOM.soundToggleBtn.addEventListener('click', () => {
@@ -1074,12 +1460,23 @@
         else syncInputControls();
       } else if (key === 'b') {
         const gate = getActiveGate();
-        if (gate.inputs === 2) {
+        if (gate.inputs !== 1) {
           state.inputB = state.inputB ? 0 : 1;
           AudioEngine.playClick(state.inputB === 1);
           if (state.liveUpdate) evaluateCircuit();
           else syncInputControls();
         }
+      } else if (key === 'c') {
+        const gate = getActiveGate();
+        if (gate.inputs !== 1 && state.inputMode === 3) {
+          state.inputC = state.inputC ? 0 : 1;
+          AudioEngine.playClick(state.inputC === 1);
+          if (state.liveUpdate) evaluateCircuit();
+          else syncInputControls();
+        }
+      } else if (key === 'm') {
+        setInputMode(state.inputMode === 2 ? 3 : 2);
+        AudioEngine.playClick(true);
       } else if (key === 'enter') {
         e.preventDefault();
         evaluateCircuit();
@@ -1087,6 +1484,7 @@
       } else if (key === 'r') {
         state.inputA = 0;
         state.inputB = 0;
+        state.inputC = 0;
         AudioEngine.playClick(false);
         evaluateCircuit();
       } else if (['1', '2', '3', '4', '5', '6', '7'].includes(key)) {

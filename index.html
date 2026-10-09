@@ -111,6 +111,10 @@
               <div class="card-top-bar">
                 <div class="step-indicator">Step 2</div>
                 <h4 class="card-heading">Set Inputs & Test Circuit</h4>
+                <div class="input-mode-selector" id="inputModeSelector">
+                  <button type="button" class="mode-tab active" data-mode="2" id="mode2Btn" title="2-Input gates (A, B)">2 Inputs</button>
+                  <button type="button" class="mode-tab" data-mode="3" id="mode3Btn" title="3-Input gates (A, B, C)">3 Inputs</button>
+                </div>
                 <div class="live-toggle-wrapper">
                   <label class="switch-control" title="Toggle automatic real-time calculation">
                     <input type="checkbox" id="autoUpdateCheckbox" checked>
@@ -124,7 +128,7 @@
               <div class="circuit-board">
                 
                 <!-- Input Terminal Controls (Left of circuit) -->
-                <div class="terminals-side">
+                <div class="terminals-side" id="terminalsSide">
                   
                   <!-- Terminal A -->
                   <div class="terminal-block" id="terminalBlockA">
@@ -158,9 +162,25 @@
                     </div>
                   </div>
 
+                  <!-- Terminal C (active in 3-input mode) -->
+                  <div class="terminal-block hidden" id="terminalBlockC">
+                    <div class="terminal-label-row">
+                      <span class="terminal-name">Input C</span>
+                      <span class="terminal-badge" id="badgeInputC">0 (LOW)</span>
+                    </div>
+                    
+                    <div class="terminal-switch-row">
+                      <button type="button" class="bit-btn active" data-terminal="c" data-bit="0">0</button>
+                      <button type="button" class="bit-btn" data-terminal="c" data-bit="1">1</button>
+                      <button type="button" class="rocker-switch" id="rockerSwitchC" aria-label="Toggle Input C">
+                        <span class="rocker-thumb"></span>
+                      </button>
+                    </div>
+                  </div>
+
                   <!-- Single-input notice for NOT gate -->
                   <div class="single-input-notice hidden" id="singleInputNotice">
-                    <span>ℹ️ The NOT gate uses a single input (Input A).</span>
+                    <span>ℹ️ The NOT gate is an inverter with 1 input (Input A).</span>
                   </div>
 
                 </div>
@@ -177,6 +197,11 @@
                     <path id="wireB" d="M 10 150 L 140 150" class="schematic-wire" />
                     <circle id="nodeB" cx="12" cy="150" r="4" class="wire-node" />
                     <text id="wireTextB" x="70" y="140" class="wire-tag">B = 0</text>
+
+                    <!-- Wire C (for 3-input mode) -->
+                    <path id="wireC" d="M 10 160 L 140 160" class="schematic-wire" style="display:none;" />
+                    <circle id="nodeC" cx="12" cy="160" r="4" class="wire-node" style="display:none;" />
+                    <text id="wireTextC" x="70" y="152" class="wire-tag" style="display:none;">C = 0</text>
 
                     <!-- Gate Symbol Container -->
                     <g id="schematicGateContainer" transform="translate(140, 10)">
@@ -248,6 +273,7 @@
                 <div class="signal-legend">
                   <span class="legend-item legend-a"><span class="legend-line line-a"></span> Input A</span>
                   <span class="legend-item legend-b" id="legendB"><span class="legend-line line-b"></span> Input B</span>
+                  <span class="legend-item legend-c" id="legendC" style="display:none;"><span class="legend-line line-c"></span> Input C</span>
                   <span class="legend-item legend-y"><span class="legend-line line-y"></span> Output Y</span>
                 </div>
                 <span class="graph-hint-text">Updates dynamically with input changes</span>
@@ -307,6 +333,7 @@
                     <tr id="truthTableHead">
                       <th>A</th>
                       <th id="thB">B</th>
+                      <th id="thC" style="display:none;">C</th>
                       <th>Output (Y)</th>
                     </tr>
                   </thead>
@@ -441,14 +468,22 @@
                 </div>
               </div>
 
+              <div class="multi-terminal-unit" id="multiUnitC">
+                <span class="m-label">Input C:</span>
+                <div class="terminal-switch-row">
+                  <button type="button" class="multi-bit-btn active" data-terminal="c" data-bit="0">0</button>
+                  <button type="button" class="multi-bit-btn" data-terminal="c" data-bit="1">1</button>
+                </div>
+              </div>
+
             </div>
 
             <div class="multi-presets-row">
               <span class="preset-label">Test inputs:</span>
-              <button type="button" class="preset-pill active" id="btnPreset00">0, 0</button>
-              <button type="button" class="preset-pill" id="btnPreset01">0, 1</button>
-              <button type="button" class="preset-pill" id="btnPreset10">1, 0</button>
-              <button type="button" class="preset-pill" id="btnPreset11">1, 1</button>
+              <button type="button" class="preset-pill active" id="btnPreset00">0, 0, 0</button>
+              <button type="button" class="preset-pill" id="btnPreset01">0, 1, 0</button>
+              <button type="button" class="preset-pill" id="btnPreset10">1, 1, 0</button>
+              <button type="button" class="preset-pill" id="btnPreset11">1, 1, 1</button>
             </div>
           </div>
 
@@ -488,7 +523,7 @@
               <tr>
                 <th>Category</th>
                 <th>Gate</th>
-                <th>Expression</th>
+                <th>Expression (2-In / 3-In)</th>
                 <th>Output = 1 (HIGH) Condition</th>
                 <th>Key Application</th>
               </tr>
@@ -497,51 +532,51 @@
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
                 <td><strong>AND</strong></td>
-                <td><code>Y = A · B</code></td>
+                <td><code>Y = A · B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = A · B · C</code></small></td>
                 <td>All inputs must be 1</td>
                 <td>Address decoders, serial enables</td>
               </tr>
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
                 <td><strong>OR</strong></td>
-                <td><code>Y = A + B</code></td>
+                <td><code>Y = A + B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = A + B + C</code></small></td>
                 <td>At least one input is 1</td>
                 <td>Interrupt lines, alarm sensors</td>
               </tr>
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
                 <td><strong>NOT</strong></td>
-                <td><code>Y = A̅</code></td>
+                <td><code>Y = A̅</code><br><small style="color:var(--text-dim)">Single-input inverter</small></td>
                 <td>Single input must be 0</td>
                 <td>Signal inverting, clock oscillators</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-universal">Universal</span></td>
                 <td><strong>NAND</strong></td>
-                <td><code>Y = (A · B)̅</code></td>
+                <td><code>Y = (A · B)̅</code><br><small style="color:var(--text-dim)">3-In: <code>Y = (A · B · C)̅</code></small></td>
                 <td>At least one input is 0</td>
                 <td>Silicon SSD flash, universal logic</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-universal">Universal</span></td>
                 <td><strong>NOR</strong></td>
-                <td><code>Y = (A + B)̅</code></td>
+                <td><code>Y = (A + B)̅</code><br><small style="color:var(--text-dim)">3-In: <code>Y = (A + B + C)̅</code></small></td>
                 <td>All inputs must be 0</td>
                 <td>SR flip-flops, Apollo Guidance Computer</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
                 <td><strong>XOR</strong></td>
-                <td><code>Y = A ⊕ B</code></td>
-                <td>Inputs are different ($A \neq B$)</td>
-                <td>Half-adders, parity generation, crypto</td>
+                <td><code>Y = A ⊕ B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = A ⊕ B ⊕ C</code></small></td>
+                <td>Odd number of inputs are 1</td>
+                <td>Half/Full adders, parity generator</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
                 <td><strong>XNOR</strong></td>
-                <td><code>Y = A ⊙ B</code></td>
-                <td>Inputs are identical ($A = B$)</td>
-                <td>Magnitude comparators, equality test</td>
+                <td><code>Y = A ⊙ B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = (A ⊕ B ⊕ C)̅</code></small></td>
+                <td>Even number of inputs are 1</td>
+                <td>Magnitude comparators, parity test</td>
               </tr>
             </tbody>
           </table>
@@ -566,6 +601,8 @@
           <table class="shortcut-table">
             <tr><td><kbd>A</kbd></td><td>Toggle Input A (0 ↔ 1)</td></tr>
             <tr><td><kbd>B</kbd></td><td>Toggle Input B (0 ↔ 1)</td></tr>
+            <tr><td><kbd>C</kbd></td><td>Toggle Input C (0 ↔ 1)</td></tr>
+            <tr><td><kbd>M</kbd></td><td>Switch between 2-Input & 3-Input modes</td></tr>
             <tr><td><kbd>1</kbd> – <kbd>7</kbd></td><td>Switch gate (AND, OR, NOT, NAND, NOR, XOR, XNOR)</td></tr>
             <tr><td><kbd>Enter</kbd></td><td>Evaluate output</td></tr>
             <tr><td><kbd>R</kbd></td><td>Reset inputs to 0</td></tr>
