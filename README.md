@@ -74,4 +74,4 @@ Simply double-click `index.html` to open it in Chrome, Edge, or Firefox without 
 
 ---
 
-Developed by **Samarth Jain** for Discrete Structures & Theory of Logic (DSTL).
+Developed by **Samarth Jain** for Discrete Structure and Theory of Logic (DSTL).

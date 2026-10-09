@@ -343,7 +343,7 @@
             <span class="diff-eyebrow">DIGITAL LOGIC CLASSIFICATION</span>
             <h2 class="diff-main-title">Differentiating Logic Gate Types</h2>
             <p class="diff-main-desc">
-              Digital logic gates are categorized into three distinct families based on their functional role, universal completeness, and arithmetic capability.
+              Logic gates are divided into 3 simple groups based on how they work and what they are used for: <strong>Basic Gates</strong>, <strong>Universal Gates</strong>, and <strong>Exclusive Gates</strong>.
             </p>
           </div>
         </div>
@@ -358,15 +358,15 @@
               <h3 class="cat-title">1. Basic Gates</h3>
             </div>
             <p class="cat-desc">
-              The fundamental building blocks representing atomic Boolean algebra operations: conjunction (AND), disjunction (OR), and negation (NOT).
+              These are the simplest starting gates. Every computer circuit is built starting from these three basic actions: checking if all signals are ON (AND), checking if any signal is ON (OR), or flipping a signal to its opposite (NOT).
             </p>
             <div class="cat-gates-list">
-              <div class="cat-gate-chip"><strong>AND</strong> (All 1s → 1)</div>
-              <div class="cat-gate-chip"><strong>OR</strong> (Any 1 → 1)</div>
-              <div class="cat-gate-chip"><strong>NOT</strong> (Inverts 0 ↔ 1)</div>
+              <div class="cat-gate-chip"><strong>AND</strong> (Both inputs must be 1 → 1)</div>
+              <div class="cat-gate-chip"><strong>OR</strong> (Any input is 1 → 1)</div>
+              <div class="cat-gate-chip"><strong>NOT</strong> (Flips 0 ↔ 1)</div>
             </div>
             <div class="cat-footer-note">
-              <em>Key property:</em> Cannot be simplified further. All other logic circuits are historically derived from these.
+              <em>Simple Rule:</em> Think of these as basic math (+, ×, and opposite) for digital computer signals.
             </div>
           </div>
 
@@ -377,14 +377,14 @@
               <h3 class="cat-title">2. Universal Gates</h3>
             </div>
             <p class="cat-desc">
-              Functionally complete gates capable of implementing <strong>ANY</strong> Boolean function or CPU component without needing any other gate type.
+              These are "all-in-one" master gates. You can build <strong>any other logic gate or full computer chip</strong> using ONLY NAND gates or ONLY NOR gates, which makes manufacturing chips much simpler and cheaper.
             </p>
             <div class="cat-gates-list">
-              <div class="cat-gate-chip"><strong>NAND</strong> (NOT-AND)</div>
-              <div class="cat-gate-chip"><strong>NOR</strong> (NOT-OR)</div>
+              <div class="cat-gate-chip"><strong>NAND</strong> (Opposite of AND: gives 0 only when all inputs are 1)</div>
+              <div class="cat-gate-chip"><strong>NOR</strong> (Opposite of OR: gives 1 only when all inputs are 0)</div>
             </div>
             <div class="cat-footer-note">
-              <em>De Morgan's Laws:</em> $(\overline{A \cdot B}) = \overline{A} + \overline{B}$ and $(\overline{A + B}) = \overline{A} \cdot \overline{B}$.
+              <em>Why "Universal"?</em> Because a factory only needs to produce this one gate to make an entire computer processor.
             </div>
           </div>
 
@@ -395,14 +395,14 @@
               <h3 class="cat-title">3. Exclusive Gates</h3>
             </div>
             <p class="cat-desc">
-              Specialized arithmetic gates designed for parity generation, digital bit comparison, and binary addition (Sum bit in Half/Full Adders).
+              These gates compare inputs to see if they are the same or different. They are mainly used in calculators and processors to add numbers together (binary addition) and check data for errors.
             </p>
             <div class="cat-gates-list">
-              <div class="cat-gate-chip"><strong>XOR</strong> (1 when inputs differ)</div>
-              <div class="cat-gate-chip"><strong>XNOR</strong> (1 when inputs match)</div>
+              <div class="cat-gate-chip"><strong>XOR</strong> (1 when inputs are different: 0 & 1 or 1 & 0)</div>
+              <div class="cat-gate-chip"><strong>XNOR</strong> (1 when inputs are the same: 0 & 0 or 1 & 1)</div>
             </div>
             <div class="cat-footer-note">
-              <em>Modulo-2 addition:</em> XOR functions as binary single-bit addition without carry.
+              <em>Simple Rule:</em> XOR checks "Are inputs different?" while XNOR checks "Are inputs identical?".
             </div>
           </div>
 
@@ -488,7 +488,6 @@
               <tr>
                 <th>Category</th>
                 <th>Gate</th>
-                <th>Symbol</th>
                 <th>Expression</th>
                 <th>Output = 1 (HIGH) Condition</th>
                 <th>Key Application</th>
@@ -498,7 +497,6 @@
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
                 <td><strong>AND</strong></td>
-                <td><code>A · B</code></td>
                 <td><code>Y = A · B</code></td>
                 <td>All inputs must be 1</td>
                 <td>Address decoders, serial enables</td>
@@ -506,7 +504,6 @@
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
                 <td><strong>OR</strong></td>
-                <td><code>A + B</code></td>
                 <td><code>Y = A + B</code></td>
                 <td>At least one input is 1</td>
                 <td>Interrupt lines, alarm sensors</td>
@@ -514,7 +511,6 @@
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
                 <td><strong>NOT</strong></td>
-                <td><code>A̅</code></td>
                 <td><code>Y = A̅</code></td>
                 <td>Single input must be 0</td>
                 <td>Signal inverting, clock oscillators</td>
@@ -522,7 +518,6 @@
               <tr>
                 <td><span class="cat-pill pill-universal">Universal</span></td>
                 <td><strong>NAND</strong></td>
-                <td><code>(A · B)̅</code></td>
                 <td><code>Y = (A · B)̅</code></td>
                 <td>At least one input is 0</td>
                 <td>Silicon SSD flash, universal logic</td>
@@ -530,7 +525,6 @@
               <tr>
                 <td><span class="cat-pill pill-universal">Universal</span></td>
                 <td><strong>NOR</strong></td>
-                <td><code>(A + B)̅</code></td>
                 <td><code>Y = (A + B)̅</code></td>
                 <td>All inputs must be 0</td>
                 <td>SR flip-flops, Apollo Guidance Computer</td>
@@ -538,7 +532,6 @@
               <tr>
                 <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
                 <td><strong>XOR</strong></td>
-                <td><code>A ⊕ B</code></td>
                 <td><code>Y = A ⊕ B</code></td>
                 <td>Inputs are different ($A \neq B$)</td>
                 <td>Half-adders, parity generation, crypto</td>
@@ -546,7 +539,6 @@
               <tr>
                 <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
                 <td><strong>XNOR</strong></td>
-                <td><code>(A ⊕ B)̅</code></td>
                 <td><code>Y = A ⊙ B</code></td>
                 <td>Inputs are identical ($A = B$)</td>
                 <td>Magnitude comparators, equality test</td>
@@ -602,7 +594,7 @@
 
   <footer class="footer">
     <div class="footer-container">
-      <p>Logic Gates — Digital Logic & Discrete Structures Educational Simulator</p>
+      <p>Logic Gates — Discrete Structure and Theory of Logic (DSTL)</p>
       <div class="footer-links">
         <a href="https://samarthjainsj2005-sketch.github.io/Logic-Gate-project/" class="footer-link">🌐 Live Website</a>
         <span class="footer-sep">•</span>
