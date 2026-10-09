@@ -918,14 +918,12 @@
         tr.innerHTML = `
           <td><span class="row-badge ${row.a ? 'is-1' : 'is-0'}">${row.a}</span></td>
           <td><span class="row-badge ${row.y ? 'is-1' : 'is-0'}">${row.y}</span></td>
-          <td>${row.y ? 'HIGH (+5V)' : 'LOW (0V)'}</td>
         `;
       } else {
         tr.innerHTML = `
           <td><span class="row-badge ${row.a ? 'is-1' : 'is-0'}">${row.a}</span></td>
           <td><span class="row-badge ${row.b ? 'is-1' : 'is-0'}">${row.b}</span></td>
           <td><span class="row-badge ${row.y ? 'is-1' : 'is-0'}">${row.y}</span></td>
-          <td>${row.y ? 'HIGH (+5V)' : 'LOW (0V)'}</td>
         `;
       }
 

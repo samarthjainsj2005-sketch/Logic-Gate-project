@@ -1155,7 +1155,7 @@ body {
   color: #fff;
 }
 
-.truth-table tbody tr.row-active td:nth-child(3) {
+.truth-table tbody tr.row-active td:last-child {
   color: var(--signal-high);
 }
 
