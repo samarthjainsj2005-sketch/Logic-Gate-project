@@ -14,26 +14,25 @@ An interactive, clean digital logic gate simulator and waveform timing graph exp
 ## 🌟 Key Features
 
 ### 1. Interactive Logic Gate Simulation
-- Covers all 7 essential logic gates:
-  - **Basic Gates**: AND, OR, NOT
-  - **Universal Gates**: NAND, NOR
-  - **Exclusive / Arithmetic Gates**: XOR, XNOR
-- **Step 1: Select a Gate & Input Mode** — Clean vector schematic outlines, IEEE standard symbols, and instant toggle between **2-Input Mode (A, B)** and **3-Input Mode (A, B, C)**.
-- **Step 2: Set Inputs** — Tactile bit toggles (`0` and `1`), interactive rocker switches, and combination presets (`0,0`, `0,1`, `1,0`, `1,1` or 8-step presets for 3 inputs).
+- Covers all 11 logic gates:
+  - **Standard 2-Input / 1-Input Gates**: AND, OR, NOT, NAND, NOR, XOR, XNOR
+  - **3-Input Multi-Gate Circuits**: 3-Input AND, 3-Input OR, 3-Input NAND, 3-Input NOR
+- **Step 1: Select Any of 11 Gates** — Clean vector schematic outlines, IEEE standard symbols, and instant automatic adaptation of terminal wires and truth tables.
+- **Step 2: Set Inputs** — Tactile bit toggles (`0` and `1`), interactive rocker switches, and combination presets (`0,0,0` through `1,1,1`).
 - **Step 3: Result & Deduction** — Instant output evaluation (`0.0V / GND` vs `5.0V / VCC`), step-by-step boolean calculation breakdown, and plain-English logic explanations.
 
 ### 2. Digital Waveform Timing Graph (Oscilloscope)
 - Real-time square-wave timing diagram plotting **Input A** (Amber), **Input B** (Purple), **Input C** (Cyan), and **Output Y** (Emerald green).
-- **▶ Run 4-Step / 8-Step Clock**: Cycles through all binary permutations (`00 → 11` or `000 → 111`) to draw a complete timing diagram automatically.
+- **▶ Run Clock**: Cycles through all binary permutations (`00 → 11` or `000 → 111`) to draw a complete timing diagram automatically.
 
 ### 3. Gate Types Differentiation & Comparator Tab
-- Deep, structured breakdown of the 3 fundamental gate families.
-- **Multi-Gate Comparator**: Toggle inputs and observe all 7 gates computing outputs simultaneously.
-- **Comparative Output Logic Level Graph**: Plots comparative signal response ($0\text{V}$ vs $5\text{V}$) across all gates side-by-side.
-- Master comparison matrix table with boolean laws and applications.
+- Deep, structured breakdown of the fundamental gate families.
+- **Multi-Gate Comparator**: Toggle inputs and observe all 11 gates computing outputs simultaneously.
+- **Comparative Output Logic Level Graph**: Plots comparative signal response ($0\text{V}$ vs $5\text{V}$) across all 11 gates side-by-side.
+- Master comparison matrix table with boolean laws and applications for all 11 gates.
 
 ### 4. Interactive Truth Table
-- Synchronized truth table that dynamically highlights the active combination.
+- Synchronized truth table that dynamically highlights the active combination (2, 4, or 8 rows).
 - Click any row in the table to immediately load and simulate that state.
 
 ---
@@ -61,8 +60,8 @@ Simply double-click `index.html` to open it in Chrome, Edge, or Firefox without 
 | <kbd>A</kbd> | Toggle Input A (0 ↔ 1) |
 | <kbd>B</kbd> | Toggle Input B (0 ↔ 1) |
 | <kbd>C</kbd> | Toggle Input C (0 ↔ 1) |
-| <kbd>M</kbd> | Switch between 2-Input and 3-Input modes |
 | <kbd>1</kbd> – <kbd>7</kbd> | Switch between AND, OR, NOT, NAND, NOR, XOR, XNOR |
+| <kbd>8</kbd>, <kbd>9</kbd>, <kbd>0</kbd>, <kbd>-</kbd> | Switch between 3-Input AND, 3-Input OR, 3-Input NAND, 3-Input NOR |
 | <kbd>Enter</kbd> | Evaluate output |
 | <kbd>R</kbd> | Reset all inputs to 0 |
 

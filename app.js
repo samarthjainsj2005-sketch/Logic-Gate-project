@@ -1,7 +1,9 @@
 /**
  * Logic Gates — Digital Logic Simulator & Waveform Engine
  * Interactive Workbench, Gate Differentiation & Real-Time Waveform Graphs
- * Supports 2-Input and 3-Input logic gates with waveforms and truth tables
+ * Contains 11 logic gates in total:
+ * - 7 standard gates: AND, OR, NOT, NAND, NOR, XOR, XNOR
+ * - 4 three-input gates: 3-Input AND, 3-Input OR, 3-Input NAND, 3-Input NOR
  */
 
 (function () {
@@ -49,37 +51,25 @@
     }
   };
 
-  // --- Logic Gates Knowledge Base ---
+  // --- 11 Logic Gates Knowledge Base ---
   const GATES = [
     {
       id: 'and',
       name: 'AND Gate',
-      category: 'Basic Gate',
+      shortName: 'AND',
+      category: 'Basic Gate (2-In)',
       categoryType: 'basic',
       inputs: 2,
-      formula2: 'Y = A · B',
-      formula3: 'Y = A · B · C',
-      summary2: 'Outputs 1 (HIGH) only when BOTH inputs A and B are 1.',
-      summary3: 'Outputs 1 (HIGH) only when ALL THREE inputs (A, B, and C) are 1.',
-      eval2: (a, b) => (a === 1 && b === 1 ? 1 : 0),
-      eval3: (a, b, c) => (a === 1 && b === 1 && c === 1 ? 1 : 0),
-      table2: [
+      formula: 'Y = A · B',
+      summary: 'Outputs 1 (HIGH) only when BOTH inputs A and B are 1.',
+      eval: (a, b) => (a === 1 && b === 1 ? 1 : 0),
+      table: [
         { a: 0, b: 0, y: 0 },
         { a: 0, b: 1, y: 0 },
         { a: 1, b: 0, y: 0 },
         { a: 1, b: 1, y: 1 }
       ],
-      table3: [
-        { a: 0, b: 0, c: 0, y: 0 },
-        { a: 0, b: 0, c: 1, y: 0 },
-        { a: 0, b: 1, c: 0, y: 0 },
-        { a: 0, b: 1, c: 1, y: 0 },
-        { a: 1, b: 0, c: 0, y: 0 },
-        { a: 1, b: 0, c: 1, y: 0 },
-        { a: 1, b: 1, c: 0, y: 0 },
-        { a: 1, b: 1, c: 1, y: 1 }
-      ],
-      note: 'Analogy: Switches connected in series. Current passes only when all switches are closed.',
+      note: 'Analogy: Two switches in series. Current passes only when both are closed.',
       svg: `
         <path d="M 0 10 L 70 10 C 130 10 150 45 150 90 C 150 135 130 170 70 170 L 0 170 Z" class="gate-body-path" />
         <path d="M 150 90 L 170 90" class="schematic-wire" />
@@ -94,32 +84,20 @@
     {
       id: 'or',
       name: 'OR Gate',
-      category: 'Basic Gate',
+      shortName: 'OR',
+      category: 'Basic Gate (2-In)',
       categoryType: 'basic',
       inputs: 2,
-      formula2: 'Y = A + B',
-      formula3: 'Y = A + B + C',
-      summary2: 'Outputs 1 (HIGH) if AT LEAST ONE input (A or B) is 1.',
-      summary3: 'Outputs 1 (HIGH) if AT LEAST ONE of the three inputs is 1.',
-      eval2: (a, b) => (a === 1 || b === 1 ? 1 : 0),
-      eval3: (a, b, c) => (a === 1 || b === 1 || c === 1 ? 1 : 0),
-      table2: [
+      formula: 'Y = A + B',
+      summary: 'Outputs 1 (HIGH) if AT LEAST ONE input (A or B) is 1.',
+      eval: (a, b) => (a === 1 || b === 1 ? 1 : 0),
+      table: [
         { a: 0, b: 0, y: 0 },
         { a: 0, b: 1, y: 1 },
         { a: 1, b: 0, y: 1 },
         { a: 1, b: 1, y: 1 }
       ],
-      table3: [
-        { a: 0, b: 0, c: 0, y: 0 },
-        { a: 0, b: 0, c: 1, y: 1 },
-        { a: 0, b: 1, c: 0, y: 1 },
-        { a: 0, b: 1, c: 1, y: 1 },
-        { a: 1, b: 0, c: 0, y: 1 },
-        { a: 1, b: 0, c: 1, y: 1 },
-        { a: 1, b: 1, c: 0, y: 1 },
-        { a: 1, b: 1, c: 1, y: 1 }
-      ],
-      note: 'Analogy: Switches connected in parallel. Current passes if any switch is closed.',
+      note: 'Analogy: Two switches in parallel. Current passes if either switch is closed.',
       svg: `
         <path d="M 0 10 Q 30 90 0 170 Q 75 165 150 90 Q 75 15 0 10 Z" class="gate-body-path" />
         <path d="M 150 90 L 170 90" class="schematic-wire" />
@@ -134,24 +112,18 @@
     {
       id: 'not',
       name: 'NOT Gate',
-      category: 'Basic Gate',
+      shortName: 'NOT',
+      category: 'Basic Gate (1-In)',
       categoryType: 'basic',
       inputs: 1,
-      formula2: 'Y = A̅',
-      formula3: 'Y = A̅',
-      summary2: 'Inverts the digital input: 0 becomes 1, and 1 becomes 0.',
-      summary3: 'Inverts the digital input: 0 becomes 1, and 1 becomes 0 (Inverter is strictly single-input).',
-      eval2: (a) => (a === 1 ? 0 : 1),
-      eval3: (a) => (a === 1 ? 0 : 1),
-      table2: [
+      formula: 'Y = A̅',
+      summary: 'Inverts the digital input: 0 becomes 1, and 1 becomes 0.',
+      eval: (a) => (a === 1 ? 0 : 1),
+      table: [
         { a: 0, y: 1 },
         { a: 1, y: 0 }
       ],
-      table3: [
-        { a: 0, y: 1 },
-        { a: 1, y: 0 }
-      ],
-      note: 'Single-input gate (Inverter). Crucial for generating opposite states and clock oscillators.',
+      note: 'Single-input inverter: Crucial for generating opposite states and clock oscillators.',
       svg: `
         <polygon points="10,20 135,90 10,160" class="gate-body-path" />
         <circle cx="145" cy="90" r="9" class="gate-bubble" />
@@ -168,30 +140,18 @@
     {
       id: 'nand',
       name: 'NAND Gate',
-      category: 'Universal Gate',
+      shortName: 'NAND',
+      category: 'Universal Gate (2-In)',
       categoryType: 'universal',
       inputs: 2,
-      formula2: 'Y = (A · B)̅',
-      formula3: 'Y = (A · B · C)̅',
-      summary2: 'Outputs 0 (LOW) only when both inputs are 1. Otherwise outputs 1.',
-      summary3: 'Outputs 0 (LOW) only when all 3 inputs are 1. Otherwise outputs 1.',
-      eval2: (a, b) => (a === 1 && b === 1 ? 0 : 1),
-      eval3: (a, b, c) => (a === 1 && b === 1 && c === 1 ? 0 : 1),
-      table2: [
+      formula: 'Y = (A · B)̅',
+      summary: 'Outputs 0 (LOW) only when both inputs are 1. Otherwise outputs 1.',
+      eval: (a, b) => (a === 1 && b === 1 ? 0 : 1),
+      table: [
         { a: 0, b: 0, y: 1 },
         { a: 0, b: 1, y: 1 },
         { a: 1, b: 0, y: 1 },
         { a: 1, b: 1, y: 0 }
-      ],
-      table3: [
-        { a: 0, b: 0, c: 0, y: 1 },
-        { a: 0, b: 0, c: 1, y: 1 },
-        { a: 0, b: 1, c: 0, y: 1 },
-        { a: 0, b: 1, c: 1, y: 1 },
-        { a: 1, b: 0, c: 0, y: 1 },
-        { a: 1, b: 0, c: 1, y: 1 },
-        { a: 1, b: 1, c: 0, y: 1 },
-        { a: 1, b: 1, c: 1, y: 0 }
       ],
       note: 'Universal Gate: Any boolean function can be built exclusively using NAND gates.',
       svg: `
@@ -210,32 +170,20 @@
     {
       id: 'nor',
       name: 'NOR Gate',
-      category: 'Universal Gate',
+      shortName: 'NOR',
+      category: 'Universal Gate (2-In)',
       categoryType: 'universal',
       inputs: 2,
-      formula2: 'Y = (A + B)̅',
-      formula3: 'Y = (A + B + C)̅',
-      summary2: 'Outputs 1 (HIGH) only when both inputs are 0. Otherwise outputs 0.',
-      summary3: 'Outputs 1 (HIGH) only when all 3 inputs are 0. Otherwise outputs 0.',
-      eval2: (a, b) => (a === 0 && b === 0 ? 1 : 0),
-      eval3: (a, b, c) => (a === 0 && b === 0 && c === 0 ? 1 : 0),
-      table2: [
+      formula: 'Y = (A + B)̅',
+      summary: 'Outputs 1 (HIGH) only when both inputs are 0. Otherwise outputs 0.',
+      eval: (a, b) => (a === 0 && b === 0 ? 1 : 0),
+      table: [
         { a: 0, b: 0, y: 1 },
         { a: 0, b: 1, y: 0 },
         { a: 1, b: 0, y: 0 },
         { a: 1, b: 1, y: 0 }
       ],
-      table3: [
-        { a: 0, b: 0, c: 0, y: 1 },
-        { a: 0, b: 0, c: 1, y: 0 },
-        { a: 0, b: 1, c: 0, y: 0 },
-        { a: 0, b: 1, c: 1, y: 0 },
-        { a: 1, b: 0, c: 0, y: 0 },
-        { a: 1, b: 0, c: 1, y: 0 },
-        { a: 1, b: 1, c: 0, y: 0 },
-        { a: 1, b: 1, c: 1, y: 0 }
-      ],
-      note: 'Universal Gate: De Morgan’s equivalent is (A + B + C)̅ = A̅ · B̅ · C̅.',
+      note: 'Universal Gate: De Morgan’s equivalent is (A + B)̅ = A̅ · B̅.',
       svg: `
         <path d="M 0 10 Q 25 90 0 170 Q 65 165 135 90 Q 65 15 0 10 Z" class="gate-body-path" />
         <circle cx="145" cy="90" r="9" class="gate-bubble" />
@@ -252,32 +200,20 @@
     {
       id: 'xor',
       name: 'XOR Gate',
-      category: 'Exclusive Gate',
+      shortName: 'XOR',
+      category: 'Exclusive Gate (2-In)',
       categoryType: 'exclusive',
       inputs: 2,
-      formula2: 'Y = A ⊕ B',
-      formula3: 'Y = A ⊕ B ⊕ C',
-      summary2: 'Outputs 1 (HIGH) when inputs are DIFFERENT (one is 1, the other is 0).',
-      summary3: 'Outputs 1 (HIGH) when an ODD number of inputs are 1 (e.g. exactly one input is 1, or all three are 1).',
-      eval2: (a, b) => (a ^ b),
-      eval3: (a, b, c) => ((a + b + c) % 2),
-      table2: [
+      formula: 'Y = A ⊕ B',
+      summary: 'Outputs 1 (HIGH) when inputs are DIFFERENT (one is 1, the other is 0).',
+      eval: (a, b) => (a ^ b),
+      table: [
         { a: 0, b: 0, y: 0 },
         { a: 0, b: 1, y: 1 },
         { a: 1, b: 0, y: 1 },
         { a: 1, b: 1, y: 0 }
       ],
-      table3: [
-        { a: 0, b: 0, c: 0, y: 0 },
-        { a: 0, b: 0, c: 1, y: 1 },
-        { a: 0, b: 1, c: 0, y: 1 },
-        { a: 0, b: 1, c: 1, y: 0 },
-        { a: 1, b: 0, c: 0, y: 1 },
-        { a: 1, b: 0, c: 1, y: 0 },
-        { a: 1, b: 1, c: 0, y: 0 },
-        { a: 1, b: 1, c: 1, y: 1 }
-      ],
-      note: 'Odd parity function: Generates 1 when an odd count of inputs are HIGH.',
+      note: 'Arithmetic building block: Generates the Sum bit in binary Half Adders.',
       svg: `
         <path d="M -12 10 Q 18 90 -12 170" class="schematic-wire" fill="none" stroke-width="3" />
         <path d="M 5 10 Q 35 90 5 170 Q 80 165 150 90 Q 80 15 5 10 Z" class="gate-body-path" />
@@ -294,32 +230,20 @@
     {
       id: 'xnor',
       name: 'XNOR Gate',
-      category: 'Exclusive Gate',
+      shortName: 'XNOR',
+      category: 'Exclusive Gate (2-In)',
       categoryType: 'exclusive',
       inputs: 2,
-      formula2: 'Y = (A ⊕ B)̅',
-      formula3: 'Y = (A ⊕ B ⊕ C)̅',
-      summary2: 'Outputs 1 (HIGH) when inputs are IDENTICAL (both 0 or both 1).',
-      summary3: 'Outputs 1 (HIGH) when an EVEN number of inputs are 1 (e.g. all 0s, or exactly two inputs are 1).',
-      eval2: (a, b) => (a === b ? 1 : 0),
-      eval3: (a, b, c) => ((a + b + c) % 2 === 0 ? 1 : 0),
-      table2: [
+      formula: 'Y = (A ⊕ B)̅',
+      summary: 'Outputs 1 (HIGH) when inputs are IDENTICAL (both 0 or both 1).',
+      eval: (a, b) => (a === b ? 1 : 0),
+      table: [
         { a: 0, b: 0, y: 1 },
         { a: 0, b: 1, y: 0 },
         { a: 1, b: 0, y: 0 },
         { a: 1, b: 1, y: 1 }
       ],
-      table3: [
-        { a: 0, b: 0, c: 0, y: 1 },
-        { a: 0, b: 0, c: 1, y: 0 },
-        { a: 0, b: 1, c: 0, y: 0 },
-        { a: 0, b: 1, c: 1, y: 1 },
-        { a: 1, b: 0, c: 0, y: 0 },
-        { a: 1, b: 0, c: 1, y: 1 },
-        { a: 1, b: 1, c: 0, y: 1 },
-        { a: 1, b: 1, c: 1, y: 0 }
-      ],
-      note: 'Even parity function: Outputs 1 when an even count of inputs are HIGH.',
+      note: 'Equivalence comparator: Checks whether two digital bits are equal.',
       svg: `
         <path d="M -12 10 Q 18 90 -12 170" class="schematic-wire" fill="none" stroke-width="3" />
         <path d="M 5 10 Q 35 90 5 170 Q 75 165 135 90 Q 75 15 5 10 Z" class="gate-body-path" />
@@ -334,107 +258,209 @@
           <circle cx="50" cy="15" r="3" stroke="currentColor" stroke-width="2" fill="none" />
         </svg>
       `
+    },
+    {
+      id: 'and3',
+      name: '3-Input AND Gate',
+      shortName: '3-AND',
+      category: '3-Input Basic',
+      categoryType: 'basic',
+      inputs: 3,
+      formula: 'Y = A · B · C',
+      summary: 'Outputs 1 (HIGH) only when ALL THREE inputs (A, B, and C) are 1.',
+      eval: (a, b, c) => (a === 1 && b === 1 && c === 1 ? 1 : 0),
+      table: [
+        { a: 0, b: 0, c: 0, y: 0 },
+        { a: 0, b: 0, c: 1, y: 0 },
+        { a: 0, b: 1, c: 0, y: 0 },
+        { a: 0, b: 1, c: 1, y: 0 },
+        { a: 1, b: 0, c: 0, y: 0 },
+        { a: 1, b: 0, c: 1, y: 0 },
+        { a: 1, b: 1, c: 0, y: 0 },
+        { a: 1, b: 1, c: 1, y: 1 }
+      ],
+      note: 'Three-input series configuration: all 3 inputs must be active simultaneously to pass current.',
+      svg: `
+        <path d="M 0 10 L 70 10 C 130 10 150 45 150 90 C 150 135 130 170 70 170 L 0 170 Z" class="gate-body-path" />
+        <path d="M 150 90 L 170 90" class="schematic-wire" />
+        <text x="65" y="96" text-anchor="middle" class="gate-label-text">3-AND</text>
+      `,
+      tabSvg: `
+        <svg viewBox="0 0 60 30" class="tab-icon-svg" fill="none">
+          <path d="M 10 5 L 32 5 C 48 5 52 15 52 15 C 52 15 48 25 32 25 L 10 25 Z" stroke="currentColor" stroke-width="2" />
+          <line x1="2" y1="9" x2="10" y2="9" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="15" x2="10" y2="15" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="21" x2="10" y2="21" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      `
+    },
+    {
+      id: 'or3',
+      name: '3-Input OR Gate',
+      shortName: '3-OR',
+      category: '3-Input Basic',
+      categoryType: 'basic',
+      inputs: 3,
+      formula: 'Y = A + B + C',
+      summary: 'Outputs 1 (HIGH) if AT LEAST ONE input (A, B, or C) is 1.',
+      eval: (a, b, c) => (a === 1 || b === 1 || c === 1 ? 1 : 0),
+      table: [
+        { a: 0, b: 0, c: 0, y: 0 },
+        { a: 0, b: 0, c: 1, y: 1 },
+        { a: 0, b: 1, c: 0, y: 1 },
+        { a: 0, b: 1, c: 1, y: 1 },
+        { a: 1, b: 0, c: 0, y: 1 },
+        { a: 1, b: 0, c: 1, y: 1 },
+        { a: 1, b: 1, c: 0, y: 1 },
+        { a: 1, b: 1, c: 1, y: 1 }
+      ],
+      note: 'Three-input parallel configuration: current passes if any of the three switches is closed.',
+      svg: `
+        <path d="M 0 10 Q 30 90 0 170 Q 75 165 150 90 Q 75 15 0 10 Z" class="gate-body-path" />
+        <path d="M 150 90 L 170 90" class="schematic-wire" />
+        <text x="65" y="96" text-anchor="middle" class="gate-label-text">3-OR</text>
+      `,
+      tabSvg: `
+        <svg viewBox="0 0 60 30" class="tab-icon-svg" fill="none">
+          <path d="M 8 5 Q 20 15 8 25 Q 32 24 52 15 Q 32 6 8 5 Z" stroke="currentColor" stroke-width="2" />
+          <line x1="2" y1="9" x2="12" y2="9" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="15" x2="15" y2="15" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="21" x2="12" y2="21" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      `
+    },
+    {
+      id: 'nand3',
+      name: '3-Input NAND Gate',
+      shortName: '3-NAND',
+      category: '3-Input Universal',
+      categoryType: 'universal',
+      inputs: 3,
+      formula: 'Y = (A · B · C)̅',
+      summary: 'Outputs 0 (LOW) only when all 3 inputs are 1. Otherwise outputs 1.',
+      eval: (a, b, c) => (a === 1 && b === 1 && c === 1 ? 0 : 1),
+      table: [
+        { a: 0, b: 0, c: 0, y: 1 },
+        { a: 0, b: 0, c: 1, y: 1 },
+        { a: 0, b: 1, c: 0, y: 1 },
+        { a: 0, b: 1, c: 1, y: 1 },
+        { a: 1, b: 0, c: 0, y: 1 },
+        { a: 1, b: 0, c: 1, y: 1 },
+        { a: 1, b: 1, c: 0, y: 1 },
+        { a: 1, b: 1, c: 1, y: 0 }
+      ],
+      note: '3-Input Universal Gate: Inverted 3-input AND product. Implemented in 74HC10 ICs.',
+      svg: `
+        <path d="M 0 10 L 60 10 C 115 10 135 45 135 90 C 135 135 115 170 60 170 L 0 170 Z" class="gate-body-path" />
+        <circle cx="145" cy="90" r="9" class="gate-bubble" />
+        <path d="M 154 90 L 170 90" class="schematic-wire" />
+        <text x="60" y="96" text-anchor="middle" class="gate-label-text">3-NAND</text>
+      `,
+      tabSvg: `
+        <svg viewBox="0 0 60 30" class="tab-icon-svg" fill="none">
+          <path d="M 10 5 L 30 5 C 44 5 46 15 46 15 C 46 15 44 25 30 25 L 10 25 Z" stroke="currentColor" stroke-width="2" />
+          <circle cx="51" cy="15" r="3" stroke="currentColor" stroke-width="2" fill="none" />
+          <line x1="2" y1="9" x2="10" y2="9" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="15" x2="10" y2="15" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="21" x2="10" y2="21" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      `
+    },
+    {
+      id: 'nor3',
+      name: '3-Input NOR Gate',
+      shortName: '3-NOR',
+      category: '3-Input Universal',
+      categoryType: 'universal',
+      inputs: 3,
+      formula: 'Y = (A + B + C)̅',
+      summary: 'Outputs 1 (HIGH) only when all 3 inputs are 0. Otherwise outputs 0.',
+      eval: (a, b, c) => (a === 0 && b === 0 && c === 0 ? 1 : 0),
+      table: [
+        { a: 0, b: 0, c: 0, y: 1 },
+        { a: 0, b: 0, c: 1, y: 0 },
+        { a: 0, b: 1, c: 0, y: 0 },
+        { a: 0, b: 1, c: 1, y: 0 },
+        { a: 1, b: 0, c: 0, y: 0 },
+        { a: 1, b: 0, c: 1, y: 0 },
+        { a: 1, b: 1, c: 0, y: 0 },
+        { a: 1, b: 1, c: 1, y: 0 }
+      ],
+      note: '3-Input Universal Gate: Inverted 3-input OR sum. Implemented in 74HC27 ICs.',
+      svg: `
+        <path d="M 0 10 Q 25 90 0 170 Q 65 165 135 90 Q 65 15 0 10 Z" class="gate-body-path" />
+        <circle cx="145" cy="90" r="9" class="gate-bubble" />
+        <path d="M 154 90 L 170 90" class="schematic-wire" />
+        <text x="55" y="96" text-anchor="middle" class="gate-label-text">3-NOR</text>
+      `,
+      tabSvg: `
+        <svg viewBox="0 0 60 30" class="tab-icon-svg" fill="none">
+          <path d="M 8 5 Q 18 15 8 25 Q 28 24 44 15 Q 28 6 8 5 Z" stroke="currentColor" stroke-width="2" />
+          <circle cx="50" cy="15" r="3" stroke="currentColor" stroke-width="2" fill="none" />
+          <line x1="2" y1="9" x2="11" y2="9" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="15" x2="14" y2="15" stroke="currentColor" stroke-width="1.5" />
+          <line x1="2" y1="21" x2="11" y2="21" stroke="currentColor" stroke-width="1.5" />
+        </svg>
+      `
     }
   ];
 
   // --- Natural Plain-English Explanations ---
-  function getExplanation(gateId, a, b, c, y, mode) {
-    if (mode === 3 && gateId !== 'not') {
-      const count = a + b + c;
-      switch (gateId) {
-        case 'and':
-          return (a === 1 && b === 1 && c === 1)
-            ? 'All three inputs (A, B, and C) are 1 (HIGH). The 3-input AND gate requires all inputs to be active, so output is 1.'
-            : 'At least one input is 0 (LOW). Since all three inputs must be 1 for a 3-input AND gate, the output is 0.';
-        case 'or':
-          return (a === 1 || b === 1 || c === 1)
-            ? 'At least one input is 1 (HIGH). The 3-input OR condition ("any active signal") is satisfied, producing an output of 1.'
-            : 'All three inputs are 0 (LOW). The 3-input OR gate produces 0 only when all inputs are inactive.';
-        case 'nand':
-          return (a === 1 && b === 1 && c === 1)
-            ? 'All three inputs are 1, making the AND product 1. The 3-input NAND gate inverts this to 0.'
-            : 'At least one input is 0, so the AND product is 0. The inverted NAND output is 1.';
-        case 'nor':
-          return (a === 0 && b === 0 && c === 0)
-            ? 'All three inputs are 0, making the OR sum 0. The 3-input NOR gate inverts this to 1.'
-            : 'At least one input is 1, making the OR sum 1. The inverted NOR output is 0.';
-        case 'xor':
-          return (count % 2 === 1)
-            ? `${count} of the 3 inputs are 1 (an ODD number of 1s). The 3-input XOR (odd parity) gate produces 1.`
-            : `${count === 0 ? 'All inputs are 0' : 'Two inputs are 1'} (an EVEN number of 1s). The 3-input XOR gate produces 0.`;
-        case 'xnor':
-          return (count % 2 === 0)
-            ? `${count === 0 ? 'All inputs are 0' : 'Two inputs are 1'} (an EVEN number of 1s). The 3-input XNOR (even parity) gate produces 1.`
-            : `${count} inputs are 1 (an ODD number of 1s). The 3-input XNOR gate produces 0.`;
-        default:
-          return `Output is ${y}.`;
-      }
-    }
-
-    // 2-Input / 1-Input Standard Explanations
+  function getExplanation(gateId, a, b, c, y) {
     switch (gateId) {
       case 'and':
-        if (a === 1 && b === 1) {
-          return 'Both Input A and Input B are 1 (HIGH). Because the AND condition requires all inputs to be 1, output is 1.';
-        } else if (a === 0 && b === 0) {
-          return 'Both inputs are 0 (LOW). Since neither input is active, the AND gate produces an output of 0.';
-        } else {
-          const zero = a === 0 ? 'A' : 'B';
-          return `Input ${zero} is 0 (LOW). The AND gate requires BOTH inputs to be 1, so the output is 0.`;
-        }
+        if (a === 1 && b === 1) return 'Both Input A and Input B are 1 (HIGH). The AND condition is satisfied, so output is 1.';
+        if (a === 0 && b === 0) return 'Both inputs are 0 (LOW). Since neither input is active, AND output is 0.';
+        return `Input ${a === 0 ? 'A' : 'B'} is 0 (LOW). The AND gate requires BOTH inputs to be 1, so output is 0.`;
       case 'or':
-        if (a === 1 || b === 1) {
-          const which = (a === 1 && b === 1) ? 'both inputs are 1' : (a === 1 ? 'Input A is 1' : 'Input B is 1');
-          return `Because ${which}, the OR condition ("at least one input is active") is satisfied, producing an output of 1.`;
-        } else {
-          return 'Both inputs are 0. The OR gate produces 0 only when all inputs are 0.';
-        }
+        if (a === 1 || b === 1) return 'At least one input is 1 (HIGH). The OR condition is satisfied, producing an output of 1.';
+        return 'Both inputs are 0. The OR gate produces 0 only when all inputs are 0.';
       case 'not':
-        if (a === 1) {
-          return 'Input A is 1 (HIGH). The NOT gate inverts the logic level, pulling the output down to 0.';
-        } else {
-          return 'Input A is 0 (LOW). The NOT gate inverts the logic level, pulling the output up to 1.';
-        }
+        return a === 1 ? 'Input A is 1 (HIGH). The NOT gate inverts it to 0.' : 'Input A is 0 (LOW). The NOT gate inverts it to 1.';
       case 'nand':
-        if (a === 1 && b === 1) {
-          return 'Both inputs are 1, making AND equal to 1. The NAND gate inverts this result to 0.';
-        } else {
-          return 'At least one input is 0, so the AND condition is not met (AND = 0). The inverted NAND output is 1.';
-        }
+        return (a === 1 && b === 1)
+          ? 'Both inputs are 1, making AND equal to 1. The NAND gate inverts this to 0.'
+          : 'At least one input is 0, so AND is 0. The inverted NAND output is 1.';
       case 'nor':
-        if (a === 0 && b === 0) {
-          return 'Both inputs are 0, making OR equal to 0. The NOR gate inverts this result to 1.';
-        } else {
-          return 'At least one input is 1, making OR equal to 1. The inverted NOR output is 0.';
-        }
+        return (a === 0 && b === 0)
+          ? 'Both inputs are 0, making OR equal to 0. The NOR gate inverts this to 1.'
+          : 'At least one input is 1, making OR equal to 1. The inverted NOR output is 0.';
       case 'xor':
-        if (a !== b) {
-          return `Inputs differ (A = ${a}, B = ${b}). The Exclusive OR (XOR) gate produces 1 when inputs are unequal.`;
-        } else {
-          return `Inputs are identical (both are ${a}). The XOR gate produces 0 when inputs are equal.`;
-        }
+        return (a !== b)
+          ? `Inputs differ (A = ${a}, B = ${b}). The XOR gate produces 1 when inputs are unequal.`
+          : `Inputs are identical (both are ${a}). The XOR gate produces 0 when inputs are equal.`;
       case 'xnor':
-        if (a === b) {
-          return `Inputs are identical (both are ${a}). The XNOR (Equivalence) gate produces 1 when inputs match.`;
-        } else {
-          return `Inputs differ (A = ${a}, B = ${b}). The XNOR gate produces 0 when inputs do not match.`;
-        }
+        return (a === b)
+          ? `Inputs are identical (both are ${a}). The XNOR gate produces 1 when inputs match.`
+          : `Inputs differ (A = ${a}, B = ${b}). The XNOR gate produces 0 when inputs do not match.`;
+      case 'and3':
+        return (a === 1 && b === 1 && c === 1)
+          ? 'All 3 inputs (A, B, and C) are 1 (HIGH). The 3-input AND gate produces 1.'
+          : 'At least one input is 0 (LOW). Since a 3-input AND gate requires all three inputs to be 1, output is 0.';
+      case 'or3':
+        return (a === 1 || b === 1 || c === 1)
+          ? 'At least one of the 3 inputs is 1 (HIGH). The 3-input OR condition is satisfied, producing 1.'
+          : 'All 3 inputs are 0 (LOW). The 3-input OR gate produces 0 only when all inputs are 0.';
+      case 'nand3':
+        return (a === 1 && b === 1 && c === 1)
+          ? 'All 3 inputs are 1, making the 3-input AND product 1. The 3-input NAND gate inverts this to 0.'
+          : 'At least one input is 0, so the 3-input AND product is 0. The inverted 3-input NAND output is 1.';
+      case 'nor3':
+        return (a === 0 && b === 0 && c === 0)
+          ? 'All 3 inputs are 0, making the 3-input OR sum 0. The 3-input NOR gate inverts this to 1.'
+          : 'At least one input is 1, making the 3-input OR sum 1. The inverted 3-input NOR output is 0.';
       default:
         return `Output is ${y}.`;
     }
   }
 
-  function getCalculationString(gate, a, b, c, y, mode) {
-    if (gate.inputs === 1) {
-      return `${a}̅ = ${y}`;
-    }
-    if (mode === 3) {
-      if (gate.id === 'and') return `${a} · ${b} · ${c} = ${y}`;
-      if (gate.id === 'or') return `${a} + ${b} + ${c} = ${y}`;
-      if (gate.id === 'nand') return `(${a} · ${b} · ${c})̅ = ${y}`;
-      if (gate.id === 'nor') return `(${a} + ${b} + ${c})̅ = ${y}`;
-      if (gate.id === 'xor') return `${a} ⊕ ${b} ⊕ ${c} = ${y}`;
-      if (gate.id === 'xnor') return `(${a} ⊕ ${b} ⊕ ${c})̅ = ${y}`;
+  function getCalculationString(gate, a, b, c, y) {
+    if (gate.inputs === 1) return `${a}̅ = ${y}`;
+    if (gate.inputs === 3) {
+      if (gate.id === 'and3') return `${a} · ${b} · ${c} = ${y}`;
+      if (gate.id === 'or3') return `${a} + ${b} + ${c} = ${y}`;
+      if (gate.id === 'nand3') return `(${a} · ${b} · ${c})̅ = ${y}`;
+      if (gate.id === 'nor3') return `(${a} + ${b} + ${c})̅ = ${y}`;
     }
     const symbolMap = { and: '·', or: '+', nand: '·', nor: '+', xor: '⊕', xnor: '⊙' };
     const s = symbolMap[gate.id] || '·';
@@ -448,7 +474,6 @@
   const state = {
     currentView: 'simulator',
     gateId: 'and',
-    inputMode: 2, // 2 or 3 inputs
     inputA: 0,
     inputB: 0,
     inputC: 0,
@@ -477,10 +502,7 @@
     gateHeading: document.getElementById('gateHeading'),
     gateSummary: document.getElementById('gateSummary'),
     gateEquationCode: document.getElementById('gateEquationCode'),
-
-    // Input Mode Selector (2 vs 3 inputs)
-    mode2Btn: document.getElementById('mode2Btn'),
-    mode3Btn: document.getElementById('mode3Btn'),
+    gateInputPill: document.getElementById('gateInputPill'),
 
     // Input Terminal Blocks
     terminalsSide: document.getElementById('terminalsSide'),
@@ -592,36 +614,20 @@
     }
   }
 
-  // Switch Input Mode (2-Input vs 3-Input)
-  function setInputMode(mode) {
-    state.inputMode = mode;
-    if (DOM.mode2Btn) DOM.mode2Btn.classList.toggle('active', mode === 2);
-    if (DOM.mode3Btn) DOM.mode3Btn.classList.toggle('active', mode === 3);
-
-    renderGateTabs();
-    const gate = getActiveGate();
-    selectGate(gate.id);
-  }
-
-  // Render Step 1 Gate Selection Tabs
+  // Render Step 1 Gate Selection Tabs (All 11 Gates)
   function renderGateTabs() {
     DOM.gateGrid.innerHTML = '';
-    const is3In = state.inputMode === 3;
-
     GATES.forEach(gate => {
       const tab = document.createElement('div');
       tab.className = `gate-card-tab ${gate.id === state.gateId ? 'active' : ''}`;
       tab.dataset.gate = gate.id;
       tab.setAttribute('role', 'tab');
-
-      const formulaDisplay = (is3In && gate.inputs !== 1)
-        ? gate.formula3.replace('Y = ', '')
-        : gate.formula2.replace('Y = ', '');
+      tab.title = `${gate.name} (${gate.formula})`;
 
       tab.innerHTML = `
         ${gate.tabSvg}
-        <span class="tab-name">${gate.name.replace(' Gate', '')}</span>
-        <span class="tab-formula">${formulaDisplay}</span>
+        <span class="tab-name">${gate.shortName}</span>
+        <span class="tab-formula">${gate.formula.replace('Y = ', '')}</span>
       `;
       tab.addEventListener('click', () => {
         selectGate(gate.id);
@@ -642,22 +648,20 @@
     const tabs = DOM.gateGrid.querySelectorAll('.gate-card-tab');
     tabs.forEach(t => t.classList.toggle('active', t.dataset.gate === gateId));
 
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
-
-    // Update Banner Heading, Formula & Summary
+    // Update Banner
     DOM.gateTypeBadge.textContent = gate.category;
-    DOM.gateHeading.textContent = is3In ? `3-Input ${gate.name}` : gate.name;
-    DOM.gateSummary.textContent = is3In ? gate.summary3 : gate.summary2;
-    DOM.gateEquationCode.textContent = is3In ? gate.formula3 : gate.formula2;
+    DOM.gateHeading.textContent = gate.name;
+    DOM.gateSummary.textContent = gate.summary;
+    DOM.gateEquationCode.textContent = gate.formula;
     DOM.gateNotesBody.textContent = gate.note;
 
     // Inject schematic SVG path
     DOM.schematicGateContainer.innerHTML = gate.svg;
 
-    // Adjust Terminals and Schematic Routing
-    if (isSingle) {
+    // Adjust for gate inputs (1, 2, or 3)
+    if (gate.inputs === 1) {
       // 1-Input NOT Gate
+      if (DOM.gateInputPill) DOM.gateInputPill.textContent = '1 Input (A)';
       if (DOM.terminalsSide) DOM.terminalsSide.classList.remove('is-3-input');
       DOM.terminalBlockB.classList.add('hidden');
       if (DOM.terminalBlockC) DOM.terminalBlockC.classList.add('hidden');
@@ -668,7 +672,7 @@
       DOM.thB.style.display = 'none';
       if (DOM.thC) DOM.thC.style.display = 'none';
 
-      // Route Wire A into center
+      // Route Wire A cleanly straight into center of NOT gate
       DOM.wireA.setAttribute('d', 'M 10 100 L 150 100');
       DOM.nodeA.setAttribute('cy', '100');
       DOM.wireTextA.setAttribute('y', '90');
@@ -682,8 +686,9 @@
         DOM.nodeC.style.display = 'none';
         DOM.wireTextC.style.display = 'none';
       }
-    } else if (is3In) {
-      // 3-Input Gate
+    } else if (gate.inputs === 3) {
+      // 3-Input Gates (3-AND, 3-OR, 3-NAND, 3-NOR)
+      if (DOM.gateInputPill) DOM.gateInputPill.textContent = '3 Inputs (A, B, C)';
       if (DOM.terminalsSide) DOM.terminalsSide.classList.add('is-3-input');
       DOM.terminalBlockB.classList.remove('hidden');
       if (DOM.terminalBlockC) DOM.terminalBlockC.classList.remove('hidden');
@@ -715,7 +720,8 @@
         DOM.wireTextC.style.display = 'block';
       }
     } else {
-      // Standard 2-Input Gate
+      // Standard 2-Input Gates
+      if (DOM.gateInputPill) DOM.gateInputPill.textContent = '2 Inputs (A, B)';
       if (DOM.terminalsSide) DOM.terminalsSide.classList.remove('is-3-input');
       DOM.terminalBlockB.classList.remove('hidden');
       if (DOM.terminalBlockC) DOM.terminalBlockC.classList.add('hidden');
@@ -746,7 +752,9 @@
     }
 
     if (DOM.runClockCycleBtn) {
-      DOM.runClockCycleBtn.querySelector('span').textContent = is3In ? '▶ Run 8-Step Clock' : '▶ Run 4-Step Clock';
+      DOM.runClockCycleBtn.querySelector('span').textContent = (gate.inputs === 3)
+        ? '▶ Run 8-Step Clock'
+        : '▶ Run 4-Step Clock';
     }
 
     renderPresetButtons(gate);
@@ -757,10 +765,8 @@
   // Render Preset Combination Buttons
   function renderPresetButtons(gate) {
     DOM.presetPills.innerHTML = '';
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
 
-    if (isSingle) {
+    if (gate.inputs === 1) {
       const presets = [
         { label: 'A = 0', a: 0 },
         { label: 'A = 1', a: 1 }
@@ -778,7 +784,7 @@
         });
         DOM.presetPills.appendChild(btn);
       });
-    } else if (is3In) {
+    } else if (gate.inputs === 3) {
       const presets = [
         { label: '0, 0, 0', a: 0, b: 0, c: 0 },
         { label: '0, 0, 1', a: 0, b: 0, c: 1 },
@@ -856,14 +862,12 @@
 
     // Preset pills highlight
     const gate = getActiveGate();
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
     const pills = DOM.presetPills.querySelectorAll('.preset-pill');
 
     pills.forEach(p => {
-      if (isSingle) {
+      if (gate.inputs === 1) {
         p.classList.toggle('active', p.textContent.includes(String(state.inputA)));
-      } else if (is3In) {
+      } else if (gate.inputs === 3) {
         const expected = `${state.inputA}, ${state.inputB}, ${state.inputC}`;
         p.classList.toggle('active', p.textContent === expected);
       } else {
@@ -875,16 +879,13 @@
   // Calculate and Update Circuit Schematic, Output & Graph
   function evaluateCircuit() {
     const gate = getActiveGate();
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
-
     const a = state.inputA;
-    const b = isSingle ? 0 : state.inputB;
-    const c = is3In ? state.inputC : 0;
+    const b = gate.inputs === 1 ? 0 : state.inputB;
+    const c = gate.inputs === 3 ? state.inputC : 0;
 
-    const output = isSingle
-      ? gate.eval2(a)
-      : (is3In ? gate.eval3(a, b, c) : gate.eval2(a, b));
+    const output = gate.inputs === 1
+      ? gate.eval(a)
+      : (gate.inputs === 2 ? gate.eval(a, b) : gate.eval(a, b, c));
 
     syncInputControls();
 
@@ -894,14 +895,14 @@
     DOM.wireTextA.classList.toggle('is-high', a === 1);
     DOM.wireTextA.textContent = `A = ${a}`;
 
-    if (!isSingle) {
+    if (gate.inputs >= 2) {
       DOM.wireB.classList.toggle('is-high', b === 1);
       DOM.nodeB.classList.toggle('is-high', b === 1);
       DOM.wireTextB.classList.toggle('is-high', b === 1);
       DOM.wireTextB.textContent = `B = ${b}`;
     }
 
-    if (is3In && DOM.wireC) {
+    if (gate.inputs === 3 && DOM.wireC) {
       DOM.wireC.classList.toggle('is-high', c === 1);
       DOM.nodeC.classList.toggle('is-high', c === 1);
       DOM.wireTextC.classList.toggle('is-high', c === 1);
@@ -930,8 +931,8 @@
     DOM.resStateText.textContent = output ? 'HIGH (1)' : 'LOW (0)';
     DOM.resVoltageText.textContent = output ? '5.0 Volts (VCC)' : '0.0 Volts (GND)';
 
-    DOM.breakdownCode.textContent = getCalculationString(gate, a, b, c, output, is3In ? 3 : 2);
-    DOM.explanationParagraph.textContent = getExplanation(gate.id, a, b, c, output, is3In ? 3 : 2);
+    DOM.breakdownCode.textContent = getCalculationString(gate, a, b, c, output);
+    DOM.explanationParagraph.textContent = getExplanation(gate.id, a, b, c, output);
 
     // 4. Highlight Truth Table row
     highlightTruthTableRow(a, b, c);
@@ -944,12 +945,10 @@
   function initWaveformHistory() {
     state.waveformSamples = [];
     const gate = getActiveGate();
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
     const a = state.inputA;
-    const b = isSingle ? 0 : state.inputB;
-    const c = is3In ? state.inputC : 0;
-    const y = isSingle ? gate.eval2(a) : (is3In ? gate.eval3(a, b, c) : gate.eval2(a, b));
+    const b = gate.inputs === 1 ? 0 : state.inputB;
+    const c = gate.inputs === 3 ? state.inputC : 0;
+    const y = gate.inputs === 1 ? gate.eval(a) : (gate.inputs === 2 ? gate.eval(a, b) : gate.eval(a, b, c));
 
     for (let i = 0; i < 24; i++) {
       state.waveformSamples.push({ a, b, c, y });
@@ -969,19 +968,17 @@
     const w = DOM.waveformCanvas.width;
     const h = DOM.waveformCanvas.height;
     const gate = getActiveGate();
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
 
     waveCtx.clearRect(0, 0, w, h);
 
     // Track channels configuration
     let tracks;
-    if (isSingle) {
+    if (gate.inputs === 1) {
       tracks = [
         { name: 'A', highY: 28, lowY: 62, color: '#f59e0b' },
         { name: 'Y', highY: 105, lowY: 145, color: '#10b981' }
       ];
-    } else if (is3In) {
+    } else if (gate.inputs === 3) {
       tracks = [
         { name: 'A', highY: 16, lowY: 36, color: '#f59e0b' },
         { name: 'B', highY: 54, lowY: 74, color: '#a855f7' },
@@ -1066,13 +1063,10 @@
     DOM.runClockCycleBtn.querySelector('span').textContent = '⏹ Running Clock...';
 
     const gate = getActiveGate();
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
-
     let seq;
-    if (isSingle) {
+    if (gate.inputs === 1) {
       seq = [{ a: 0, b: 0, c: 0 }, { a: 1, b: 0, c: 0 }, { a: 0, b: 0, c: 0 }, { a: 1, b: 0, c: 0 }];
-    } else if (is3In) {
+    } else if (gate.inputs === 3) {
       seq = [
         { a: 0, b: 0, c: 0 }, { a: 0, b: 0, c: 1 },
         { a: 0, b: 1, c: 0 }, { a: 0, b: 1, c: 1 },
@@ -1091,7 +1085,9 @@
       if (step >= seq.length) {
         clearInterval(state.clockTimer);
         state.clockRunning = false;
-        DOM.runClockCycleBtn.querySelector('span').textContent = is3In ? '▶ Run 8-Step Clock' : '▶ Run 4-Step Clock';
+        DOM.runClockCycleBtn.querySelector('span').textContent = (gate.inputs === 3)
+          ? '▶ Run 8-Step Clock'
+          : '▶ Run 4-Step Clock';
         return;
       }
       state.inputA = seq[step].a;
@@ -1103,7 +1099,7 @@
     }, 650);
   }
 
-  // --- Multi-Gate Differentiation Tab ---
+  // --- Multi-Gate Differentiation Tab (All 11 Gates) ---
   function renderMultiOutputGrid() {
     DOM.multiOutputGrid.innerHTML = '';
     GATES.forEach(gate => {
@@ -1111,7 +1107,7 @@
       card.className = 'multi-gate-card';
       card.id = `multiCard_${gate.id}`;
       card.innerHTML = `
-        <span class="mg-name">${gate.name.replace(' Gate', '')}</span>
+        <span class="mg-name">${gate.shortName}</span>
         <span class="mg-val" id="multiVal_${gate.id}">0</span>
         <span class="mg-state" id="multiState_${gate.id}">LOW (0V)</span>
       `;
@@ -1158,8 +1154,8 @@
       if (!card || !valEl || !stateEl) return;
 
       const y = gate.inputs === 1
-        ? gate.eval2(a)
-        : (state.inputMode === 3 ? gate.eval3(a, b, c) : gate.eval2(a, b));
+        ? gate.eval(a)
+        : (gate.inputs === 2 ? gate.eval(a, b) : gate.eval(a, b, c));
 
       card.classList.toggle('is-high', y === 1);
       valEl.textContent = y;
@@ -1167,7 +1163,7 @@
     });
   }
 
-  // Comparative Output Logic Level Graph (5V vs 0V)
+  // Comparative Output Logic Level Graph (5V vs 0V for All 11 Gates)
   function updateComparativeGraph() {
     if (!compCtx || !DOM.comparativeBarCanvas) return;
     const w = DOM.comparativeBarCanvas.width;
@@ -1184,34 +1180,34 @@
     const lowY = 135;  // 0V level
 
     compCtx.beginPath();
-    compCtx.moveTo(60, highY);
-    compCtx.lineTo(w - 20, highY);
+    compCtx.moveTo(55, highY);
+    compCtx.lineTo(w - 15, highY);
     compCtx.stroke();
 
     compCtx.beginPath();
-    compCtx.moveTo(60, lowY);
-    compCtx.lineTo(w - 20, lowY);
+    compCtx.moveTo(55, lowY);
+    compCtx.lineTo(w - 15, lowY);
     compCtx.stroke();
     compCtx.setLineDash([]);
 
     // Voltage labels on axis
     compCtx.fillStyle = '#10b981';
-    compCtx.font = '600 11px JetBrains Mono, monospace';
-    compCtx.fillText('+5.0V (HIGH)', 10, highY + 4);
+    compCtx.font = '600 10px JetBrains Mono, monospace';
+    compCtx.fillText('+5.0V', 8, highY + 4);
 
     compCtx.fillStyle = '#64748b';
-    compCtx.fillText(' 0.0V (LOW)', 10, lowY + 4);
+    compCtx.fillText(' 0.0V', 8, lowY + 4);
 
     const a = state.multiA;
     const b = state.multiB;
     const c = state.multiC;
-    const colWidth = (w - 90) / GATES.length;
+    const colWidth = (w - 70) / GATES.length;
 
     GATES.forEach((gate, idx) => {
       const y = gate.inputs === 1
-        ? gate.eval2(a)
-        : (state.inputMode === 3 ? gate.eval3(a, b, c) : gate.eval2(a, b));
-      const x = 70 + idx * colWidth;
+        ? gate.eval(a)
+        : (gate.inputs === 2 ? gate.eval(a, b) : gate.eval(a, b, c));
+      const x = 60 + idx * colWidth;
       const barY = y === 1 ? highY : lowY;
 
       // Color coding per category
@@ -1222,19 +1218,19 @@
       // Logic level pulse bar / pillar
       compCtx.fillStyle = y === 1 ? color : '#334155';
       compCtx.beginPath();
-      compCtx.roundRect(x + 10, barY, colWidth - 20, lowY - barY + 4, [4, 4, 0, 0]);
+      compCtx.roundRect(x + 4, barY, colWidth - 8, lowY - barY + 4, [3, 3, 0, 0]);
       compCtx.fill();
 
       // Top pulse value indicator
       compCtx.fillStyle = y === 1 ? '#ffffff' : '#64748b';
-      compCtx.font = '700 13px JetBrains Mono, monospace';
+      compCtx.font = '700 12px JetBrains Mono, monospace';
       compCtx.textAlign = 'center';
       compCtx.fillText(String(y), x + colWidth / 2, barY - 8);
 
       // Gate label under column
       compCtx.fillStyle = '#cbd5e1';
-      compCtx.font = '600 11px Inter, sans-serif';
-      compCtx.fillText(gate.name.replace(' Gate', ''), x + colWidth / 2, lowY + 24);
+      compCtx.font = '600 10px Inter, sans-serif';
+      compCtx.fillText(gate.shortName, x + colWidth / 2, lowY + 22);
     });
 
     compCtx.textAlign = 'left';
@@ -1243,22 +1239,19 @@
   // --- Truth Table Engine ---
   function renderTruthTable(gate) {
     DOM.truthTableBody.innerHTML = '';
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
-    const tableData = isSingle ? gate.table2 : (is3In ? gate.table3 : gate.table2);
 
-    tableData.forEach(row => {
+    gate.table.forEach(row => {
       const tr = document.createElement('tr');
       tr.dataset.a = row.a;
-      tr.dataset.b = isSingle ? 0 : row.b;
-      tr.dataset.c = is3In ? row.c : 0;
+      tr.dataset.b = gate.inputs >= 2 ? row.b : 0;
+      tr.dataset.c = gate.inputs === 3 ? row.c : 0;
 
-      if (isSingle) {
+      if (gate.inputs === 1) {
         tr.innerHTML = `
           <td><span class="row-badge ${row.a ? 'is-1' : 'is-0'}">${row.a}</span></td>
           <td><span class="row-badge ${row.y ? 'is-1' : 'is-0'}">${row.y}</span></td>
         `;
-      } else if (is3In) {
+      } else if (gate.inputs === 3) {
         tr.innerHTML = `
           <td><span class="row-badge ${row.a ? 'is-1' : 'is-0'}">${row.a}</span></td>
           <td><span class="row-badge ${row.b ? 'is-1' : 'is-0'}">${row.b}</span></td>
@@ -1276,8 +1269,8 @@
       // Clicking any row applies that combination
       tr.addEventListener('click', () => {
         state.inputA = row.a;
-        if (!isSingle) state.inputB = row.b;
-        if (is3In) state.inputC = row.c;
+        if (gate.inputs >= 2) state.inputB = row.b;
+        if (gate.inputs === 3) state.inputC = row.c;
         AudioEngine.playClick(true);
         evaluateCircuit();
       });
@@ -1290,8 +1283,6 @@
 
   function highlightTruthTableRow(a, b, c) {
     const gate = getActiveGate();
-    const isSingle = gate.inputs === 1;
-    const is3In = state.inputMode === 3 && !isSingle;
     const rows = DOM.truthTableBody.querySelectorAll('tr');
 
     rows.forEach(tr => {
@@ -1300,9 +1291,9 @@
       const rowC = parseInt(tr.dataset.c, 10);
 
       let isMatch = false;
-      if (isSingle) {
+      if (gate.inputs === 1) {
         isMatch = (rowA === a);
-      } else if (is3In) {
+      } else if (gate.inputs === 3) {
         isMatch = (rowA === a && rowB === b && rowC === c);
       } else {
         isMatch = (rowA === a && rowB === b);
@@ -1316,10 +1307,6 @@
     // Top View Switchers
     DOM.tabSimulator.addEventListener('click', () => switchView('simulator'));
     DOM.tabDifferentiation.addEventListener('click', () => switchView('differentiation'));
-
-    // Input Mode Selector Tabs (2-Input vs 3-Input)
-    if (DOM.mode2Btn) DOM.mode2Btn.addEventListener('click', () => setInputMode(2));
-    if (DOM.mode3Btn) DOM.mode3Btn.addEventListener('click', () => setInputMode(3));
 
     // Input A Bit Buttons (0 and 1)
     DOM.terminalBlockA.querySelectorAll('.bit-btn').forEach(btn => {
@@ -1448,7 +1435,7 @@
       if (e.target === DOM.helpModal) DOM.helpModal.classList.add('hidden');
     });
 
-    // Keyboard Shortcuts
+    // Keyboard Shortcuts for 11 Gates
     window.addEventListener('keydown', (e) => {
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       const key = e.key.toLowerCase();
@@ -1460,7 +1447,7 @@
         else syncInputControls();
       } else if (key === 'b') {
         const gate = getActiveGate();
-        if (gate.inputs !== 1) {
+        if (gate.inputs >= 2) {
           state.inputB = state.inputB ? 0 : 1;
           AudioEngine.playClick(state.inputB === 1);
           if (state.liveUpdate) evaluateCircuit();
@@ -1468,15 +1455,12 @@
         }
       } else if (key === 'c') {
         const gate = getActiveGate();
-        if (gate.inputs !== 1 && state.inputMode === 3) {
+        if (gate.inputs === 3) {
           state.inputC = state.inputC ? 0 : 1;
           AudioEngine.playClick(state.inputC === 1);
           if (state.liveUpdate) evaluateCircuit();
           else syncInputControls();
         }
-      } else if (key === 'm') {
-        setInputMode(state.inputMode === 2 ? 3 : 2);
-        AudioEngine.playClick(true);
       } else if (key === 'enter') {
         e.preventDefault();
         evaluateCircuit();
@@ -1493,6 +1477,18 @@
           selectGate(GATES[idx].id);
           AudioEngine.playClick(true);
         }
+      } else if (key === '8') {
+        selectGate('and3');
+        AudioEngine.playClick(true);
+      } else if (key === '9') {
+        selectGate('or3');
+        AudioEngine.playClick(true);
+      } else if (key === '0') {
+        selectGate('nand3');
+        AudioEngine.playClick(true);
+      } else if (key === '-' || key === '_') {
+        selectGate('nor3');
+        AudioEngine.playClick(true);
       } else if (key === 'escape') {
         DOM.helpModal.classList.add('hidden');
       }

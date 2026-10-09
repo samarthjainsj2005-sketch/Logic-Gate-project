@@ -76,7 +76,7 @@
       <section class="section-card selector-section" aria-label="Gate Selector">
         <div class="section-header">
           <div class="step-indicator">Step 1</div>
-          <h2 class="section-title">Select a Logic Gate</h2>
+          <h2 class="section-title">Select a Logic Gate (11 Gates Available)</h2>
         </div>
 
         <!-- Logic Gate Selection Tabs -->
@@ -111,15 +111,12 @@
               <div class="card-top-bar">
                 <div class="step-indicator">Step 2</div>
                 <h4 class="card-heading">Set Inputs & Test Circuit</h4>
-                <div class="input-mode-selector" id="inputModeSelector">
-                  <button type="button" class="mode-tab active" data-mode="2" id="mode2Btn" title="2-Input gates (A, B)">2 Inputs</button>
-                  <button type="button" class="mode-tab" data-mode="3" id="mode3Btn" title="3-Input gates (A, B, C)">3 Inputs</button>
-                </div>
+                <span class="gate-input-pill" id="gateInputPill">2 Inputs (A, B)</span>
                 <div class="live-toggle-wrapper">
                   <label class="switch-control" title="Toggle automatic real-time calculation">
                     <input type="checkbox" id="autoUpdateCheckbox" checked>
                     <span class="switch-track"></span>
-                    <span class="switch-label">Live update</span>
+                    <span class="switch-label">Live</span>
                   </label>
                 </div>
               </div>
@@ -523,7 +520,7 @@
               <tr>
                 <th>Category</th>
                 <th>Gate</th>
-                <th>Expression (2-In / 3-In)</th>
+                <th>Expression</th>
                 <th>Output = 1 (HIGH) Condition</th>
                 <th>Key Application</th>
               </tr>
@@ -531,52 +528,80 @@
             <tbody>
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
-                <td><strong>AND</strong></td>
-                <td><code>Y = A · B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = A · B · C</code></small></td>
+                <td><strong>AND</strong> (2-In)</td>
+                <td><code>Y = A · B</code></td>
                 <td>All inputs must be 1</td>
                 <td>Address decoders, serial enables</td>
               </tr>
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
-                <td><strong>OR</strong></td>
-                <td><code>Y = A + B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = A + B + C</code></small></td>
+                <td><strong>OR</strong> (2-In)</td>
+                <td><code>Y = A + B</code></td>
                 <td>At least one input is 1</td>
                 <td>Interrupt lines, alarm sensors</td>
               </tr>
               <tr>
                 <td><span class="cat-pill">Basic</span></td>
-                <td><strong>NOT</strong></td>
-                <td><code>Y = A̅</code><br><small style="color:var(--text-dim)">Single-input inverter</small></td>
+                <td><strong>NOT</strong> (1-In)</td>
+                <td><code>Y = A̅</code></td>
                 <td>Single input must be 0</td>
                 <td>Signal inverting, clock oscillators</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-universal">Universal</span></td>
-                <td><strong>NAND</strong></td>
-                <td><code>Y = (A · B)̅</code><br><small style="color:var(--text-dim)">3-In: <code>Y = (A · B · C)̅</code></small></td>
+                <td><strong>NAND</strong> (2-In)</td>
+                <td><code>Y = (A · B)̅</code></td>
                 <td>At least one input is 0</td>
                 <td>Silicon SSD flash, universal logic</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-universal">Universal</span></td>
-                <td><strong>NOR</strong></td>
-                <td><code>Y = (A + B)̅</code><br><small style="color:var(--text-dim)">3-In: <code>Y = (A + B + C)̅</code></small></td>
+                <td><strong>NOR</strong> (2-In)</td>
+                <td><code>Y = (A + B)̅</code></td>
                 <td>All inputs must be 0</td>
                 <td>SR flip-flops, Apollo Guidance Computer</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
-                <td><strong>XOR</strong></td>
-                <td><code>Y = A ⊕ B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = A ⊕ B ⊕ C</code></small></td>
-                <td>Odd number of inputs are 1</td>
-                <td>Half/Full adders, parity generator</td>
+                <td><strong>XOR</strong> (2-In)</td>
+                <td><code>Y = A ⊕ B</code></td>
+                <td>Inputs are different ($A \neq B$)</td>
+                <td>Half-adders, binary addition</td>
               </tr>
               <tr>
                 <td><span class="cat-pill pill-exclusive">Exclusive</span></td>
-                <td><strong>XNOR</strong></td>
-                <td><code>Y = A ⊙ B</code><br><small style="color:var(--text-dim)">3-In: <code>Y = (A ⊕ B ⊕ C)̅</code></small></td>
-                <td>Even number of inputs are 1</td>
-                <td>Magnitude comparators, parity test</td>
+                <td><strong>XNOR</strong> (2-In)</td>
+                <td><code>Y = A ⊙ B</code></td>
+                <td>Inputs are identical ($A = B$)</td>
+                <td>Magnitude comparators, equality test</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill">3-Input</span></td>
+                <td><strong>3-Input AND</strong></td>
+                <td><code>Y = A · B · C</code></td>
+                <td>All 3 inputs must be 1</td>
+                <td>3-way address decoding, enables</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill">3-Input</span></td>
+                <td><strong>3-Input OR</strong></td>
+                <td><code>Y = A + B + C</code></td>
+                <td>At least one of the 3 inputs is 1</td>
+                <td>Multi-sensor aggregation, priority OR</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill pill-universal">3-Input</span></td>
+                <td><strong>3-Input NAND</strong></td>
+                <td><code>Y = (A · B · C)̅</code></td>
+                <td>At least one of the 3 inputs is 0</td>
+                <td>Standard TTL/CMOS IC 74HC10</td>
+              </tr>
+              <tr>
+                <td><span class="cat-pill pill-universal">3-Input</span></td>
+                <td><strong>3-Input NOR</strong></td>
+                <td><code>Y = (A + B + C)̅</code></td>
+                <td>All 3 inputs must be 0</td>
+                <td>Multi-way zero detect, IC 74HC27</td>
               </tr>
             </tbody>
           </table>
@@ -602,8 +627,8 @@
             <tr><td><kbd>A</kbd></td><td>Toggle Input A (0 ↔ 1)</td></tr>
             <tr><td><kbd>B</kbd></td><td>Toggle Input B (0 ↔ 1)</td></tr>
             <tr><td><kbd>C</kbd></td><td>Toggle Input C (0 ↔ 1)</td></tr>
-            <tr><td><kbd>M</kbd></td><td>Switch between 2-Input & 3-Input modes</td></tr>
-            <tr><td><kbd>1</kbd> – <kbd>7</kbd></td><td>Switch gate (AND, OR, NOT, NAND, NOR, XOR, XNOR)</td></tr>
+            <tr><td><kbd>1</kbd> – <kbd>7</kbd></td><td>Select 2-In / 1-In gates (AND, OR, NOT, NAND, NOR, XOR, XNOR)</td></tr>
+            <tr><td><kbd>8</kbd>, <kbd>9</kbd>, <kbd>0</kbd>, <kbd>-</kbd></td><td>Select 3-Input gates (3-AND, 3-OR, 3-NAND, 3-NOR)</td></tr>
             <tr><td><kbd>Enter</kbd></td><td>Evaluate output</td></tr>
             <tr><td><kbd>R</kbd></td><td>Reset inputs to 0</td></tr>
           </table>

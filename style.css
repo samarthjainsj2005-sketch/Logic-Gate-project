@@ -253,20 +253,26 @@ body {
   color: #fff;
 }
 
-/* Gate Selection Tabs */
+/* Gate Selection Tabs (11 Gates) */
 .gate-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.65rem;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 0.5rem;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
+  .gate-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
   .gate-grid {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-@media (max-width: 540px) {
+@media (max-width: 480px) {
   .gate-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -276,15 +282,16 @@ body {
   background: var(--bg-card-subtle);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
-  padding: 0.85rem 0.6rem;
+  padding: 0.65rem 0.35rem;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 0.4rem;
+  gap: 0.3rem;
   transition: all var(--transition-fast);
   user-select: none;
+  min-width: 0;
 }
 
 .gate-card-tab:hover {
@@ -447,39 +454,16 @@ body {
   flex: 1;
 }
 
-/* Input Mode Selector (2-Input vs 3-Input) */
-.input-mode-selector {
-  display: inline-flex;
-  background: var(--bg-input);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-sm);
-  padding: 2px;
-  gap: 2px;
-}
-
-.mode-tab {
-  background: transparent;
-  border: none;
-  font-family: var(--font-sans);
-  font-size: 0.74rem;
+.gate-input-pill {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--text-muted);
-  padding: 0.3rem 0.65rem;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  color: var(--signal-high);
+  background: var(--signal-high-bg);
+  border: 1px solid var(--signal-high-border);
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
   white-space: nowrap;
-}
-
-.mode-tab:hover {
-  color: #fff;
-}
-
-.mode-tab.active {
-  background: var(--signal-high);
-  color: #0c1017;
-  font-weight: 700;
-  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.3);
 }
 
 .live-toggle-wrapper {
